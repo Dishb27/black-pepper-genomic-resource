@@ -1,0 +1,55 @@
+{
+  "assemblies": [
+    {
+      "name": "Piper_nigrum.genome",
+      "sequence": {
+        "type": "ReferenceSequenceTrack",
+        "trackId": "Piper_nigrum.genome-ReferenceSequenceTrack",
+        "adapter": {
+          "type": "BgzipFastaAdapter",
+          "fastaLocation": {
+            "uri": "Piper_nigrum.genome.fa.gz",
+            "locationType": "UriLocation"
+          },
+          "faiLocation": {
+            "uri": "Piper_nigrum.genome.fa.gz.fai",
+            "locationType": "UriLocation"
+          },
+          "gziLocation": {
+            "uri": "Piper_nigrum.genome.fa.gz.gzi",
+            "locationType": "UriLocation"
+          }
+        }
+      }
+    }
+  ],
+  "configuration": {},
+  "connections": [],
+  "defaultSession": {
+    "name": "New Session"
+  },
+  "tracks": [
+    {
+      "type": "FeatureTrack",
+      "trackId": "Piper_nigrum.sorted_utf8.gff3",
+      "name": "Piper_nigrum.sorted_utf8.gff3",
+      "adapter": {
+        "type": "Gff3TabixAdapter",
+        "gffGzLocation": {
+          "uri": "Piper_nigrum.sorted_utf8.gff3.gz",
+          "locationType": "UriLocation"
+        },
+        "index": {
+          "location": {
+            "uri": "Piper_nigrum.sorted_utf8.gff3.gz.tbi",
+            "locationType": "UriLocation"
+          },
+          "indexType": "TBI"
+        }
+      },
+      "assemblyNames": [
+        "Piper_nigrum.genome"
+      ]
+    }
+  ]
+}

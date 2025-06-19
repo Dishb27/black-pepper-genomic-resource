@@ -1,0 +1,28 @@
+/* Ensure the viewer's container takes the full height */
+.jbrowseContainer {
+  display: flex;
+  flex-direction: row; /* Horizontal layout for fixed track selector on left */
+  height: 100vh;
+  width: 100%;
+}
+
+/* Track selector on the left side, fixed */
+.jbrowseContainer .trackSelector {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 300px; /* Adjust the width of the track selector */
+  z-index: 1000; /* Make sure it stays on top */
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Adjust the main genome view's size */
+.jbrowseContainer .genomeView {
+  margin-left: 320px; /* Create space for the track selector */
+  flex: 1; /* Make sure the genome view takes the remaining space */
+  overflow: hidden;
+}
