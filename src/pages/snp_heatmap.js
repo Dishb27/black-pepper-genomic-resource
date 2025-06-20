@@ -1,5 +1,4 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Heatmap from "../components/heatmap";
 import { processSNPData } from "../utils/processSNP";
 import { DNA } from "react-loader-spinner";
@@ -7,6 +6,7 @@ import { DNA } from "react-loader-spinner";
 export default function Home() {
   const [chromosomes, setChromosomes] = useState([]);
   const [heatmapData, setHeatmapData] = useState([]);
+  const [windowWidth, setWindowWidth] = useState(0);
 
   // Function to load the file from the public directory
   const loadFile = async () => {
@@ -27,7 +27,16 @@ export default function Home() {
 
   useEffect(() => {
     loadFile();
-  }, []); // Load file when the component mounts
+
+    // Set windowWidth on mount and update on resize
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    handleResize(); // initial set
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div
@@ -61,8 +70,8 @@ export default function Home() {
         >
           <DNA
             color="#2b655d"
-            height={window.innerWidth < 500 ? 100 : 200}
-            width={window.innerWidth < 500 ? 100 : 200}
+            height={windowWidth && windowWidth < 500 ? 100 : 200}
+            width={windowWidth && windowWidth < 500 ? 100 : 200}
           />
         </div>
       )}
