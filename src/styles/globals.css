@@ -52,17 +52,19 @@ body {
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  background-attachment: fixed; /* Creates parallax effect on desktop */
+  background-attachment: fixed;
   margin-top: 25px;
   height: 100vh;
-  min-height: 500px; /* Minimum height for very small screens */
+  min-height: 500px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
   color: white;
-  padding: var(--spacing-md); /* Add padding for mobile */
-  /* Ensure the background image loads properly */
+  padding: var(--spacing-md);
+  /* Fallback background color */
+  background-color: #035b53;
+  /* Enhanced browser compatibility */
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -616,24 +618,32 @@ body {
 /* Mobile Portrait */
 @media (max-width: 768px) {
   .banner {
+    /* Remove background-image for mobile and use img element instead */
+    background-image: none !important;
+    background-color: #1b837b;
+    background-attachment: scroll;
     margin-top: 15px;
     min-height: 600px;
     height: calc(100vh - 15px);
     padding: var(--spacing-xs);
-    background-attachment: scroll;
-    background-position: center center;
-    background-size: cover;
-    /* Critical for mobile image display */
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-color: #1b837b; /* Fallback color */
-    /* Force GPU acceleration for better rendering */
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
-    transform: translateZ(0);
+    /* Ensure proper stacking context */
+    isolation: isolate;
+  }
+
+  /* Show the fallback image on mobile */
+  .banner-mobile-fallback {
+    display: block !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: -1;
+    /* Ensure image loads quickly */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
   }
 
   .banner-content {

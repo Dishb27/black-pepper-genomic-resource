@@ -275,19 +275,48 @@ export default function Home() {
       <Head>
         <title>BlackPepKB - Black Pepper Knowledgebase</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+          rel="preload"
+          as="image"
+          href="https://res.cloudinary.com/dsjtalfn9/image/upload/q_auto,f_auto,w_800/fruit3_ngcrh2.jpg"
+          media="(max-width: 768px)"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="https://res.cloudinary.com/dsjtalfn9/image/upload/fruit3_ngcrh2.jpg"
+          media="(min-width: 769px)"
+        />
       </Head>
 
       <Header />
 
       <section id="home" className="banner">
-        {/* Mobile fallback image */}
-        <img
-          src="/images/fruit3.jpg"
-          alt="Black Pepper Background"
-          className="banner-mobile-fallback"
-          loading="eager"
-          decoding="async"
-        />
+        {/* Enhanced mobile fallback image with multiple sources */}
+        <picture>
+          <source
+            media="(max-width: 480px)"
+            srcSet="https://res.cloudinary.com/dsjtalfn9/image/upload/q_auto,f_auto,w_500,h_600,c_fill/fruit3_ngcrh2.jpg"
+          />
+          <source
+            media="(max-width: 768px)"
+            srcSet="https://res.cloudinary.com/dsjtalfn9/image/upload/q_auto,f_auto,w_800,h_700,c_fill/fruit3_ngcrh2.jpg"
+          />
+          <img
+            src="https://res.cloudinary.com/dsjtalfn9/image/upload/q_auto,f_auto,w_800/fruit3_ngcrh2.jpg"
+            alt="Black Pepper Background"
+            className="banner-mobile-fallback"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            onError={(e) => {
+              // Fallback if Cloudinary image fails
+              e.target.style.display = "none";
+              e.target.parentElement.style.backgroundColor = "#1b837b";
+            }}
+          />
+        </picture>
+
         <div className="banner-content">
           <h1>BLACK PEPPER KNOWLEDGEBASE</h1>
           <h1>(BlackPepKB)</h1>
