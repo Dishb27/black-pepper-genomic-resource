@@ -207,7 +207,7 @@ export default function Home() {
   ];
 
   const stats = [
-    { label: "Genes", value: 63462 },
+    { label: "Genes", value: 63451 },
     { label: "SNPs", value: 432418 },
     { label: "GO Terms", value: 273018 },
     { label: "TF Families", value: 62 },
