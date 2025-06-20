@@ -113,7 +113,10 @@ const Header = () => {
         {/* Logo */}
         <div className={styles.logo}>
           <Link href="/">
-            <img src="/images/PepperKB1.svg" alt="PepperKB Logo" />
+            <img
+              src="https://res.cloudinary.com/dsjtalfn9/image/upload/PepperKB1_nvchcr.svg"
+              alt="PepperKB Logo"
+            />
           </Link>
         </div>
 
@@ -193,8 +196,8 @@ const Header = () => {
               }`}
             >
               <Link href="/geneExpViz">Gene Expression Visualization</Link>
-              <Link href="/blast">BLAST</Link>
-              <Link href="/jbrowse2">JBrowse2</Link>
+              {/* <Link href="/blast">BLAST</Link> */}
+              {/* <Link href="/jbrowse2">JBrowse2</Link> */}
               <Link href="/genetool">GeneViz</Link>
               <Link href="/pepperClust">PepperClust</Link>
               <Link href="/peppergo">GO-Pep</Link>
@@ -317,5 +320,3 @@ const Header = () => {
 };
 
 export default Header;
-
-

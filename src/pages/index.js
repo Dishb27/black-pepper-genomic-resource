@@ -6,8 +6,8 @@ import Image from "next/image";
 import {
   Layers,
   Search,
-  Globe,
-  DollarSign,
+  //Globe,
+  //DollarSign,
   Leaf,
   Utensils,
 } from "lucide-react";
@@ -127,7 +127,7 @@ export default function Home() {
 
   const navigationTools = [
     {
-      src: "/images/pp_efp.svg",
+      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/pp_efp_wft5ap.svg",
       alt: "eFP Browser",
       label: "eFP Browser",
       description:
@@ -136,28 +136,28 @@ export default function Home() {
       icon: Leaf,
       color: "#2ecc71",
     },
+    // {
+    //   src: "https://res.cloudinary.com/dsjtalfn9/image/upload/blast_e1jhh1.svg",
+    //   alt: "BLAST",
+    //   label: "BLAST",
+    //   description:
+    //     "Align your sequences against the black pepper genome and proteome using the BLAST tool.",
+    //   link: "/blast",
+    //   icon: DollarSign,
+    //   color: "#3498db",
+    // },
+    // {
+    //   src: "https://res.cloudinary.com/dsjtalfn9/image/upload/jbrowse_i4foyb.svg",
+    //   alt: "JBrowse2",
+    //   label: "JBrowse2",
+    //   description:
+    //     "Visualize genome annotations with the feature-rich JBrowse2 platform.",
+    //   link: "/jbrowse2",
+    //   icon: Globe,
+    //   color: "#9b59b6",
+    // },
     {
-      src: "/images/blast.svg",
-      alt: "BLAST",
-      label: "BLAST",
-      description:
-        "Align your sequences against the black pepper genome and proteome using the BLAST tool.",
-      link: "/blast",
-      icon: DollarSign,
-      color: "#3498db",
-    },
-    {
-      src: "/images/jbrowse.svg",
-      alt: "JBrowse2",
-      label: "JBrowse2",
-      description:
-        "Visualize genome annotations with the feature-rich JBrowse2 platform.",
-      link: "/jbrowse2",
-      icon: Globe,
-      color: "#9b59b6",
-    },
-    {
-      src: "/images/ppExp.svg",
+      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/ppExp_czqcch.svg",
       alt: "Expression Heatmap",
       label: "PepperExp",
       description: "Visualize gene expression data using interactive heatmaps.",
@@ -166,7 +166,7 @@ export default function Home() {
       color: "#e74c3c",
     },
     {
-      src: "/images/snp_final.svg",
+      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/snp_final_zl0zja.svg",
       alt: "SNP Marker Search",
       label: "SNP Marker Search",
       description: "Search for markers using chromosome and position range.",
@@ -175,7 +175,7 @@ export default function Home() {
       color: "#f39c12",
     },
     {
-      src: "/images/geneviz1.svg",
+      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/geneviz1_tl6g0r.svg",
       alt: "GeneViz",
       label: "GeneViz",
       description:
@@ -185,7 +185,7 @@ export default function Home() {
       color: "#f39c12",
     },
     {
-      src: "/images/goPep.svg",
+      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/goPep_cok5xv.svg",
       alt: "GO-Pep",
       label: "GO-Pep",
       description:
@@ -195,7 +195,7 @@ export default function Home() {
       color: "#f39c12",
     },
     {
-      src: "/images/pepClust.svg",
+      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/pepClust_xhksvc.svg",
       alt: "PepperClust",
       label: "PepperClust",
       description:

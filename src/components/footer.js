@@ -20,8 +20,8 @@ const Footer = () => {
       title: "Tools",
       links: [
         { label: "Pepper-eFP Browser", href: "/efp_browser" },
-        { label: "BLAST", href: "/blast" },
-        { label: "JBrowse2", href: "/jbrowse2" },
+        // { label: "BLAST", href: "/blast" },
+        // { label: "JBrowse2", href: "/jbrowse2" },
         { label: "GeneViz", href: "/genetool" },
         { label: "PepperExp", href: "/pepperExp" },
         { label: "PepperClust", href: "/pepperClust" },
@@ -31,7 +31,7 @@ const Footer = () => {
     {
       title: "Help",
       links: [
-        { label: "Manual", href: "/manual" },
+        { label: "Guide", href: "/manual" },
         { label: "References", href: "/references" },
         { label: "Contact Us", href: "/contact" },
       ],
