@@ -45,8 +45,8 @@ const GeneExpVizPage = () => {
           <div className={styles.heroContent}>
             <h1 className={styles.heroTitle}>Gene Expression Visualization</h1>
             <p className={styles.heroSubtitle}>
-              Explore comprehensive pepper gene expression datasets through
-              interactive visualization tools
+              Explore comprehensive black pepper gene expression datasets
+              through interactive visualization tools
             </p>
           </div>
         </section>
