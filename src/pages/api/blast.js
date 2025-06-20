@@ -96,6 +96,7 @@ export default async function handler(req, res) {
       try {
         sequenceContent = Buffer.from(file.content, "base64").toString("utf8");
       } catch (error) {
+        console.error("File decoding error:", error);
         return res.status(400).json({
           error: "Invalid file content encoding. File must be base64 encoded.",
         });
