@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import Heatmap from "../components/heatmap";
 import { processSNPData } from "../utils/processSNP";

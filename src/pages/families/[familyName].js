@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import { FaDna, FaSearch, FaTimes, FaBars } from "react-icons/fa";
+import { FaDna, FaSearch, FaTimes } from "react-icons/fa";
 import styles from "../../styles/genes.module.css";
 import geneStructureStyles from "../../styles/genes_structure.module.css";
 import Footer from "../../components/footer";
@@ -148,6 +148,13 @@ const GeneStructurePopup = ({ geneId, geneData, onClose }) => {
   );
 };
 
+// Add PropTypes validation
+GeneStructurePopup.propTypes = {
+  geneId: PropTypes.string,
+  geneData: PropTypes.array.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
 // Main Family Page Component
 const FamilyPage = () => {
   const [data, setData] = useState([]);
@@ -155,8 +162,6 @@ const FamilyPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState(null);
   const [selectedGeneId, setSelectedGeneId] = useState(null); // For popup functionality
   const router = useRouter();
   const { familyName } = router.query;
@@ -228,18 +233,6 @@ const FamilyPage = () => {
   const handleResetSearch = () => {
     setSearchTerm("");
     setFilteredData(data);
-  };
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const toggleDropdown = (index) => {
-    if (openDropdown === index) {
-      setOpenDropdown(null);
-    } else {
-      setOpenDropdown(index);
-    }
   };
 
   // Handler to open the structure popup when a gene ID is clicked
@@ -366,7 +359,7 @@ const FamilyPage = () => {
                 </div>
               ) : (
                 <div className={styles.noResults}>
-                  <p>No genes found matching "{searchTerm}"</p>
+                  <p>No genes found matching &quot;{searchTerm}&quot;</p>
                   <button
                     className={styles.resetSearchButton}
                     onClick={handleResetSearch}

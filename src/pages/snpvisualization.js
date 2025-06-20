@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import styles from "../styles/snp_visualization.module.css";
 
 const SNPVisualization = ({ snps, start, end }) => {
@@ -6,8 +7,8 @@ const SNPVisualization = ({ snps, start, end }) => {
   const height = 200;
   const padding = 50;
   const triangleHeight = 8;
-  const triangleBase = 5; // Adjust base width of triangle here
-  const tickCount = 5; // Number of ticks (excluding start and end)
+  const triangleBase = 5;
+  const tickCount = 5;
 
   const [tooltip, setTooltip] = useState(null);
 
@@ -23,7 +24,7 @@ const SNPVisualization = ({ snps, start, end }) => {
 
   const getTicks = () => {
     const ticks = [];
-    const step = (end - start) / (tickCount + 1); // Divide the range evenly
+    const step = (end - start) / (tickCount + 1);
     for (let i = 1; i <= tickCount; i++) {
       ticks.push(start + i * step);
     }
@@ -32,15 +33,13 @@ const SNPVisualization = ({ snps, start, end }) => {
 
   const handleTriangleClick = (snp) => {
     if (tooltip?.position === scaleX(snp.position)) {
-      // If the tooltip is already displayed for the clicked SNP, hide it
       setTooltip(null);
     } else {
-      // Otherwise, show the tooltip
       setTooltip({
         position: scaleX(snp.position),
-        y: height / 2 - triangleHeight - 25, // Position tooltip above the triangle
+        y: height / 2 - triangleHeight - 25,
         positionText: `Position: ${snp.position}`,
-        alleleText: `${snp.ref} → ${snp.alt}`, // Format Ref → Alt
+        alleleText: `${snp.ref} → ${snp.alt}`,
       });
     }
   };
@@ -49,10 +48,9 @@ const SNPVisualization = ({ snps, start, end }) => {
 
   return (
     <svg width={width} height={height} className={styles.visualization}>
-      {/* Top Heading */}
       <text
         x={width / 2}
-        y={20} // Adjust vertical position of the heading
+        y={20}
         textAnchor="middle"
         fontSize="16"
         fontWeight="bold"
@@ -61,7 +59,6 @@ const SNPVisualization = ({ snps, start, end }) => {
         SNP Location
       </text>
 
-      {/* Horizontal line */}
       <line
         x1={padding}
         y1={height / 2}
@@ -71,12 +68,10 @@ const SNPVisualization = ({ snps, start, end }) => {
         strokeWidth="2"
       />
 
-      {/* Tick marks and labels */}
       {ticks.map((tick, index) => {
         const x = scaleX(tick);
         return (
           <g key={index}>
-            {/* Tick mark */}
             <line
               x1={x}
               y1={height / 2 - 5}
@@ -85,7 +80,6 @@ const SNPVisualization = ({ snps, start, end }) => {
               stroke="black"
               strokeWidth="1"
             />
-            {/* Tick label */}
             <text
               x={x}
               y={height / 2 + 20}
@@ -99,11 +93,9 @@ const SNPVisualization = ({ snps, start, end }) => {
         );
       })}
 
-      {/* Start label */}
       <text x={padding} y={height / 2 + 40} textAnchor="middle" fontSize="12">
         {start} bp
       </text>
-      {/* End label */}
       <text
         x={width - padding}
         y={height / 2 + 40}
@@ -113,7 +105,6 @@ const SNPVisualization = ({ snps, start, end }) => {
         {end} bp
       </text>
 
-      {/* Triangles as SNP markers */}
       {snps.map((snp, index) => {
         const x = scaleX(snp.position);
         if (x === null) return null;
@@ -129,24 +120,21 @@ const SNPVisualization = ({ snps, start, end }) => {
             key={index}
             points={points}
             fill="#ee2020"
-            onClick={() => handleTriangleClick(snp)} // Click event handler
+            onClick={() => handleTriangleClick(snp)}
             style={{ cursor: "pointer" }}
           />
         );
       })}
 
-      {/* Tooltip */}
       {tooltip && (
         <g>
-          {/* Tooltip Background */}
           <rect
-            x={tooltip.position - 70} // Adjust width for better alignment
-            y={tooltip.y - 35} // Adjust position for height
+            x={tooltip.position - 70}
+            y={tooltip.y - 35}
             width="140"
             height="40"
             className={styles.tooltip}
           />
-          {/* Tooltip Text: Position */}
           <text
             x={tooltip.position}
             y={tooltip.y - 20}
@@ -154,7 +142,6 @@ const SNPVisualization = ({ snps, start, end }) => {
           >
             {tooltip.positionText}
           </text>
-          {/* Tooltip Text: Alleles */}
           <text
             x={tooltip.position}
             y={tooltip.y - 5}
@@ -166,6 +153,19 @@ const SNPVisualization = ({ snps, start, end }) => {
       )}
     </svg>
   );
+};
+
+// ✅ PropTypes validation
+SNPVisualization.propTypes = {
+  snps: PropTypes.arrayOf(
+    PropTypes.shape({
+      position: PropTypes.number.isRequired,
+      ref: PropTypes.string.isRequired,
+      alt: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  start: PropTypes.number.isRequired,
+  end: PropTypes.number.isRequired,
 };
 
 export default SNPVisualization;

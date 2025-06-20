@@ -31,6 +31,7 @@ export default async function handler(req, res) {
       res.status(200).json(parsedData);
     });
   } catch (error) {
+    console.error("VCF processing error:", error);
     res
       .status(500)
       .json({ error: "Server error while processing the VCF file" });

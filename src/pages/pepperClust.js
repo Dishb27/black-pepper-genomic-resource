@@ -36,7 +36,7 @@ const PepperClustPage = () => {
 
         iframeRef.current.contentWindow?.postMessage(message, "*");
       } catch (e) {
-        console.log("Could not communicate with iframe (CORS restriction)");
+        console.log("Could not communicate with iframe (CORS restriction)", e);
       }
     }
   };

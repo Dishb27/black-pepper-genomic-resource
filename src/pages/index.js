@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/router";
+//import { useRouter } from "next/router";
 import {
   Layers,
   Search,
@@ -21,11 +21,11 @@ import Footer from "../components/footer";
 import Header from "../components/header";
 
 export default function Home() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [, setIsScrolled] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
   const statsRef = useRef(null);
-  const router = useRouter();
+  //const router = useRouter();
 
   const handleScroll = () => {
     setIsScrolled(window.scrollY > window.innerHeight);
@@ -311,7 +311,8 @@ export default function Home() {
             <div className="intro-content">
               <p>
                 <span className="highlight">BlackPepKB</span> is a dedicated
-                platform for black pepper, the world's most valuable spice crop.
+                platform for black pepper, the world&apos;s most valuable spice
+                crop.
               </p>
               <p>
                 It provides curated data on gene families and SNP markers, along

@@ -24,8 +24,8 @@ const Manual = () => {
               providing access to all major sections.
             </li>
             <li>
-              <strong>Banner Section:</strong> Highlights the platform's purpose
-              as a translational genomics resource.
+              <strong>Banner Section:</strong> Highlights the platform&apos;s
+              purpose as a translational genomics resource.
             </li>
             <li>
               <strong>Introduction:</strong> Overview of PepperKB and its role
@@ -130,15 +130,18 @@ const Manual = () => {
                   Pn1.10)
                 </li>
                 <li>
-                  Click "Try Example" to populate fields with sample gene IDs
+                  Click &quot;Try Example&quot; to populate fields with sample
+                  gene IDs
                 </li>
-                <li>Use "Clear" to reset all input fields</li>
+                <li>Use &quot;Clear&quot; to reset all input fields</li>
               </ul>
             </li>
             <li>
               <strong>Submit Your Query:</strong>
               <ul>
-                <li>Click the "Submit" button to retrieve annotations</li>
+                <li>
+                  Click the &quot;Submit&quot; button to retrieve annotations
+                </li>
                 <li>
                   The system validates inputs and prevents empty submissions
                 </li>
@@ -222,7 +225,7 @@ const Manual = () => {
                 </li>
                 <li>You can input up to 5 gene IDs at once</li>
                 <li>
-                  Click "Try an Example" to load sample gene IDs for
+                  Click &quot;Try an Example&quot; to load sample gene IDs for
                   demonstration
                 </li>
               </ul>
@@ -231,8 +234,8 @@ const Manual = () => {
               <strong>Generate Visualizations:</strong>
               <ul>
                 <li>
-                  Click "Submit" to query the database and generate gene
-                  structures
+                  Click &quot;Submit&quot; to query the database and generate
+                  gene structures
                 </li>
                 <li>
                   The system validates inputs and prevents empty submissions
@@ -300,7 +303,7 @@ const Manual = () => {
                   line-delimited)
                 </li>
                 <li>
-                  Click "Try Example" to load a preloaded dataset
+                  Click &quot;Try Example&quot; to load a preloaded dataset
                   (Pn1.1040-Pn21.406)
                 </li>
               </ul>
@@ -324,7 +327,9 @@ const Manual = () => {
             <li>
               <strong>Generate Visualization:</strong>
               <ul>
-                <li>Click "Generate Heatmap" to process your query</li>
+                <li>
+                  Click &quot;Generate Heatmap&quot; to process your query
+                </li>
                 <li>The system validates inputs and retrieves FPKM values</li>
               </ul>
             </li>
@@ -393,8 +398,8 @@ const Manual = () => {
               <ul>
                 <li>Enter gene IDs in the text area (comma-separated)</li>
                 <li>
-                  Click "Try Example" to load demonstration genes (Pn1.1 to
-                  Pn1.1043)
+                  Click &quot;Try Example&quot; to load demonstration genes
+                  (Pn1.1 to Pn1.1043)
                 </li>
               </ul>
             </li>
@@ -422,7 +427,9 @@ const Manual = () => {
             <li>
               <strong>Generate Results:</strong>
               <ul>
-                <li>Click "Generate Visualization" to process your query</li>
+                <li>
+                  Click &quot;Generate Visualization&quot; to process your query
+                </li>
                 <li>Reset button clears all parameters if needed</li>
               </ul>
             </li>
@@ -578,14 +585,17 @@ const Manual = () => {
                   </ul>
                 </li>
                 <li>
-                  Click "View Details" to proceed to the analysis interface
+                  Click &quot;View Details&quot; to proceed to the analysis
+                  interface
                 </li>
               </ul>
             </li>
             <li>
               <strong>Specify Search Parameters:</strong>
               <ul>
-                <li>Select a chromosome (e.g., "Pn1") from the dropdown</li>
+                <li>
+                  Select a chromosome (e.g., &quot;Pn1&quot;) from the dropdown
+                </li>
                 <li>
                   Define position range by entering start and end coordinates
                 </li>
@@ -653,8 +663,8 @@ const Manual = () => {
                   Select between two exploration methods:
                   <ul>
                     <li>
-                      "Show all regions of assembly" for complete chromosome
-                      overview
+                      &quot;Show all regions of assembly&quot; for complete
+                      chromosome overview
                     </li>
                     <li>
                       Search box for direct input of coordinates, gene IDs, or
@@ -745,7 +755,10 @@ const Manual = () => {
                 <li>
                   Images cycle every five seconds with smooth fade transitions
                 </li>
-                <li>Click "Explore Collection" to access the main gallery</li>
+                <li>
+                  Click &quot;Explore Collection&quot; to access the main
+                  gallery
+                </li>
               </ul>
             </li>
             <li>
@@ -946,7 +959,7 @@ const Manual = () => {
             <li>
               <strong>Submit Your Message:</strong>
               <ul>
-                <li>Click "Send Message" to submit your inquiry</li>
+                <li>Click &quot;Send Message&quot; to submit your inquiry</li>
                 <li>
                   The system performs client-side validation before submission
                 </li>
@@ -957,7 +970,8 @@ const Manual = () => {
               <strong>Confirmation and Feedback:</strong>
               <ul>
                 <li>
-                  Successful submissions trigger a "Message Sent!" confirmation
+                  Successful submissions trigger a &quot;Message Sent!&quot;
+                  confirmation
                 </li>
                 <li>The form automatically resets after three seconds</li>
                 <li>

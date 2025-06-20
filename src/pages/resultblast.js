@@ -124,7 +124,8 @@ const ResultBlast = () => {
               <div className={styles.incompatibilityHelp}>
                 <h4>Sequence Type Mismatch:</h4>
                 <p>
-                  The sequence you provided doesn't match the selected program:
+                  The sequence you provided doesn&apos;t match the selected
+                  program:
                 </p>
                 <ul>
                   <li>

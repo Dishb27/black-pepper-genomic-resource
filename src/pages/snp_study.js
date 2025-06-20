@@ -12,7 +12,7 @@ const SNPMarkers = () => {
   const { study } = router.query;
 
   // State variables
-  const [studyId, setStudyId] = useState("");
+  const [, setStudyId] = useState("");
   const [studyName, setStudyName] = useState("");
   const [chromosome, setChromosome] = useState("");
   const [chromosomeStart, setChromosomeStart] = useState("");
@@ -25,8 +25,8 @@ const SNPMarkers = () => {
   const [showHeatmap, setShowHeatmap] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
+  const [, setCurrentPage] = useState(1);
+  const [, setTotalPages] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
   // Check if device is mobile
@@ -215,29 +215,29 @@ const SNPMarkers = () => {
   };
 
   // Render pagination controls (if needed for future use)
-  const renderPaginationControls = () => {
-    return (
-      <div className={styles.paginationControls}>
-        <button
-          onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() =>
-            setCurrentPage((page) => Math.min(totalPages, page + 1))
-          }
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>
-    );
-  };
+  // const renderPaginationControls = () => {
+  //   return (
+  //     <div className={styles.paginationControls}>
+  //       <button
+  //         onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+  //         disabled={currentPage === 1}
+  //       >
+  //         Previous
+  //       </button>
+  //       <span>
+  //         Page {currentPage} of {totalPages}
+  //       </span>
+  //       <button
+  //         onClick={() =>
+  //           setCurrentPage((page) => Math.min(totalPages, page + 1))
+  //         }
+  //         disabled={currentPage === totalPages}
+  //       >
+  //         Next
+  //       </button>
+  //     </div>
+  //   );
+  // };
 
   // Loading state
   if (loading) {
@@ -379,7 +379,7 @@ const SNPMarkers = () => {
         {/* Heatmap section */}
         {showHeatmap && allData.length > 0 && (
           <div className={styles.visualizationSection}>
-            <h3>SNP Distribution Heatmap</h3>
+            {/* <h3>SNP Distribution Heatmap</h3> */}
             <SNPHeatmap
               chromosomes={
                 filteredResults.length > 0
@@ -405,7 +405,7 @@ const SNPMarkers = () => {
             <>
               {/* SNP Visualization */}
               <div className={styles.visualizationSection}>
-                <h3>SNP Visualization</h3>
+                {/* <h3>SNP Visualization</h3> */}
                 <SNPVisualization
                   snps={filteredResults}
                   start={parseInt(chromosomeStart)}

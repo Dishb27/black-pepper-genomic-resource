@@ -1,16 +1,15 @@
 // pages/api/gene-data.js
 import pool from "../../../lib/db";
+
 export default async function handler(req, res) {
   const { action, geneId, family } = req.query;
 
   try {
-    // Get a connection from the pool
     const connection = await pool.getConnection();
     let result;
 
     switch (action) {
-      case "getGeneById":
-        // Fetch gene details by ID
+      case "getGeneById": {
         if (!geneId || typeof geneId !== "string") {
           connection.release();
           return res.status(400).json({ message: "Invalid gene ID provided." });
@@ -35,15 +34,14 @@ export default async function handler(req, res) {
 
         result = geneData[0];
         break;
+      }
 
-      case "getGoTable":
-        // Fetch GO annotations and sequences by gene ID
+      case "getGoTable": {
         if (!geneId || typeof geneId !== "string") {
           connection.release();
           return res.status(400).json({ message: "Invalid gene ID provided." });
         }
 
-        // Execute the query to retrieve GO annotations with terms
         const [goData] = await connection.execute(
           `SELECT ga.GeneID as 'Gene Id', gt.GO_term as 'GO Term', ga.GO_Id as 'GO Id', ga.Category as 'Type'
            FROM go_annotations ga
@@ -52,7 +50,6 @@ export default async function handler(req, res) {
           [geneId]
         );
 
-        // Get CDS and Protein sequences
         const [sequenceData] = await connection.execute(
           `SELECT CDS_Sequence as 'CDS Sequence', ProteinSequence as 'Protein Sequence'
            FROM gene
@@ -66,10 +63,8 @@ export default async function handler(req, res) {
           responseData = goData;
         }
 
-        // Add gene data to the response if available
         if (sequenceData.length > 0) {
           if (responseData.length === 0) {
-            // If no GO data, create a response with just gene data
             responseData = [
               {
                 "Gene Id": geneId,
@@ -81,7 +76,6 @@ export default async function handler(req, res) {
               },
             ];
           } else {
-            // Add sequences to the first GO entry
             responseData[0]["CDS Sequence"] = sequenceData[0]["CDS Sequence"];
             responseData[0]["Protein Sequence"] =
               sequenceData[0]["Protein Sequence"];
@@ -90,9 +84,9 @@ export default async function handler(req, res) {
 
         result = responseData;
         break;
+      }
 
-      case "getGenesByFamily":
-        // Fetch genes by TF family
+      case "getGenesByFamily": {
         if (!family || typeof family !== "string") {
           connection.release();
           return res
@@ -118,9 +112,9 @@ export default async function handler(req, res) {
 
         result = familyGenes;
         break;
+      }
 
-      case "getTfFamilies":
-        // Fetch all TF families
+      case "getTfFamilies": {
         const [tfFamilies] = await connection.execute(
           `SELECT DISTINCT TF_Family 
            FROM tf_family
@@ -136,22 +130,21 @@ export default async function handler(req, res) {
 
         result = tfFamilies;
         break;
+      }
 
-      default:
+      default: {
         connection.release();
         return res.status(400).json({
           message:
             "Invalid action specified. Valid actions are: getGeneById, getGoTable, getGenesByFamily, getTfFamilies",
         });
+      }
     }
 
-    // Release the connection back to the pool
     connection.release();
-
-    // Send the response with the retrieved data
     res.status(200).json(result);
   } catch (error) {
-    console.error("Database Error: ", error); // Log the error for debugging
+    console.error("Database Error: ", error);
     res
       .status(500)
       .json({ message: "An error occurred while retrieving data." });

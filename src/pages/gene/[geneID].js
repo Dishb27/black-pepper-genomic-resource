@@ -1,4 +1,6 @@
+import React from "react";
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import styles from "../../styles/genes_structure.module.css";
 import GeneStructure from "../../components/GeneStructure";
 
@@ -142,6 +144,12 @@ const GeneStructurePopup = ({ geneId, geneData, onClose }) => {
       </div>
     </div>
   );
+};
+
+GeneStructurePopup.propTypes = {
+  geneId: PropTypes.string.isRequired,
+  geneData: PropTypes.array.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default GeneStructurePopup;

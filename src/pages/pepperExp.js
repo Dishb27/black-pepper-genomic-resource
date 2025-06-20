@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import Head from "next/head";
-import Link from "next/link";
 import styles from "../styles/pepperExp.module.css";
 import Header from "../components/header";
 import Footer from "../components/footer";
@@ -43,7 +42,7 @@ function PepperExpPage() {
 
         iframeRef.current.contentWindow?.postMessage(message, "*");
       } catch (e) {
-        console.log("Could not communicate with iframe (CORS restriction)");
+        console.log("Could not communicate with iframe (CORS restriction)", e);
       }
     }
   };
@@ -167,8 +166,6 @@ function PepperExpPage() {
             )}
           </div>
         </section>
-
-       
       </main>
 
       <Footer />
