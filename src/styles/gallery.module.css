@@ -549,3 +549,188 @@
   margin-right: 10px;
   vertical-align: middle;
 }
+
+@media (max-width: 1024px) {
+  .heroSection {
+    height: 100vh !important; /* Force full viewport height */
+    margin-top: 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .heroSlide {
+    height: 100vh !important; /* Force slide to take full height */
+    position: relative;
+  }
+
+  .heroImage {
+    width: 100% !important;
+    height: 100vh !important; /* Force full viewport height */
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: scale(1.05); /* Slightly less zoom for smaller screens */
+  }
+
+  .heroContent {
+    position: absolute;
+    bottom: 15%; /* Adjust positioning for smaller screens */
+    left: 5%;
+    right: 5%;
+    max-width: none; /* Remove max-width constraint */
+    padding: 1rem;
+    z-index: 3;
+  }
+
+  .heroContent h1 {
+    font-size: 2.5rem; /* Smaller heading for tablets */
+    margin-bottom: 0.5rem;
+  }
+
+  .heroContent p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .exploreButton {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  /* Fix for slick slider container */
+  .heroSection .slick-slider,
+  .heroSection .slick-list,
+  .heroSection .slick-track {
+    height: 100vh !important;
+  }
+
+  .heroSection .slick-slide > div {
+    height: 100vh !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroSection {
+    height: 100vh !important;
+    margin-top: 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .heroSlide {
+    height: 100vh !important;
+    position: relative;
+  }
+
+  .heroImage {
+    width: 100% !important;
+    height: 100vh !important;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: scale(1.02); /* Even less zoom for mobile */
+  }
+
+  .heroContent {
+    position: absolute;
+    bottom: 15%;
+    left: 4%;
+    right: 4%;
+    padding: 0.8rem;
+    z-index: 3;
+  }
+
+  .heroContent h1 {
+    font-size: 2rem; /* Mobile heading size */
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+  }
+
+  .heroContent p {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+
+  .exploreButton {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+    border-radius: 25px;
+  }
+
+  /* Fix for slick slider container on mobile */
+  .heroSection .slick-slider,
+  .heroSection .slick-list,
+  .heroSection .slick-track {
+    height: 100vh !important;
+  }
+
+  .heroSection .slick-slide > div {
+    height: 100vh !important;
+  }
+
+  .heroSection .slick-slide {
+    height: 100vh !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroContent {
+    bottom: 12%;
+    left: 3%;
+    right: 3%;
+    padding: 0.5rem;
+  }
+
+  .heroContent h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .heroContent p {
+    font-size: 0.85rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .exploreButton {
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .buttonIcon {
+    margin-right: 6px;
+  }
+}
+
+/* Ensure the gallery section starts right after hero without gaps */
+@media (max-width: 1024px) {
+  .gallerySection {
+    margin-top: 0;
+    padding-top: 3rem; /* Consistent spacing */
+  }
+}
+
+@media (max-width: 768px) {
+  .gallerySection {
+    margin-top: 0;
+    padding-top: 2.5rem;
+    padding-left: 4%;
+    padding-right: 4%;
+  }
+}
+
+/* Fix any potential spacing issues with the main container */
+@media (max-width: 1024px) {
+  .main {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .container {
+    min-height: 100vh;
+  }
+}
