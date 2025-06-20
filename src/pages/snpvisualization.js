@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styles from "../styles/snp_visualization.module.css";
 
-const SNPVisualization = ({ snps, start, end }) => {
+const SNPVisualization = ({ snps = [], start, end }) => {
   const width = 600;
   const height = 200;
   const padding = 50;
@@ -32,11 +32,12 @@ const SNPVisualization = ({ snps, start, end }) => {
   };
 
   const handleTriangleClick = (snp) => {
-    if (tooltip?.position === scaleX(snp.position)) {
+    const pos = scaleX(snp.position);
+    if (tooltip?.position === pos) {
       setTooltip(null);
     } else {
       setTooltip({
-        position: scaleX(snp.position),
+        position: pos,
         y: height / 2 - triangleHeight - 25,
         positionText: `Position: ${snp.position}`,
         alleleText: `${snp.ref} → ${snp.alt}`,
@@ -105,7 +106,7 @@ const SNPVisualization = ({ snps, start, end }) => {
         {end} bp
       </text>
 
-      {snps.map((snp, index) => {
+      {(snps || []).map((snp, index) => {
         const x = scaleX(snp.position);
         if (x === null) return null;
 
@@ -155,7 +156,6 @@ const SNPVisualization = ({ snps, start, end }) => {
   );
 };
 
-// ✅ PropTypes validation
 SNPVisualization.propTypes = {
   snps: PropTypes.arrayOf(
     PropTypes.shape({
