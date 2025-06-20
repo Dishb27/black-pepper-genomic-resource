@@ -48,7 +48,7 @@ body {
 }
 
 .banner {
-  background-image: url("/images/fruit3.jpg");
+  background-image: url("https://res.cloudinary.com/dsjtalfn9/image/upload/fruit3_ngcrh2.jpg");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -730,7 +730,7 @@ body {
 /* High DPI Displays */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .banner {
-    background-image: url("https://res.cloudinary.com/dsjtalfn9/image/upload/fruit3_ngcrh2.jpg"); /* Keep same image or use high-res if available */
+    background-image: url("https://res.cloudinary.com/dsjtalfn9/image/upload/fruit3_ngcrh2.jpg");
   }
 }
 
