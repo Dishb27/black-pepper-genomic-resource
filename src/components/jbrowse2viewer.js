@@ -17,13 +17,13 @@ const JBrowse2Viewer = () => {
         adapter: {
           type: "BgzipFastaAdapter",
           fastaLocation: {
-            uri: "/data/Piper_nigrum.genome.fa.gz",
+            uri: "	https://piper-nigrum-jbrowse.web.app/Piper_nigrum.genome.fa.gz",
           },
           faiLocation: {
-            uri: "/data/Piper_nigrum.genome.fa.gz.fai",
+            uri: "	https://piper-nigrum-jbrowse.web.app/Piper_nigrum.genome.fa.gz.fai",
           },
           gziLocation: {
-            uri: "/data/Piper_nigrum.genome.fa.gz.gzi",
+            uri: "	https://piper-nigrum-jbrowse.web.app/Piper_nigrum.genome.fa.gz.gzi",
           },
         },
       },
@@ -36,11 +36,11 @@ const JBrowse2Viewer = () => {
         adapter: {
           type: "Gff3TabixAdapter",
           gffGzLocation: {
-            uri: "/data/Piper_nigrum_edited.sorted.gff.gz",
+            uri: "https://piper-nigrum-jbrowse.web.app/Piper_nigrum_edited.sorted.gff.gz",
           },
           index: {
             location: {
-              uri: "/data/Piper_nigrum_edited.sorted.gff.gz.tbi",
+              uri: "	https://piper-nigrum-jbrowse.web.app/Piper_nigrum_edited.sorted.gff.gz.tbi",
             },
             indexType: "TBI",
           },
@@ -55,11 +55,11 @@ const JBrowse2Viewer = () => {
         adapter: {
           type: "VcfTabixAdapter",
           vcfGzLocation: {
-            uri: "/data/20miss.recode.vcf.gz", // Path to your VCF file
+            uri: "https://piper-nigrum-jbrowse.web.app/20miss.recode.vcf.gz", // Path to your VCF file
           },
           index: {
             location: {
-              uri: "/data/20miss.recode.vcf.gz.tbi", // Path to your index file
+              uri: "https://piper-nigrum-jbrowse.web.app/20miss.recode.vcf.gz.tbi", // Path to your index file
             },
             indexType: "TBI", // Tabix index type
           },

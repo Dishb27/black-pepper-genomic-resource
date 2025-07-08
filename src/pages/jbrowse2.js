@@ -1,8 +1,8 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import styles from "../styles/jbrowse2.module.css";
-import Header from "../components/header";
 import Footer from "../components/footer";
+import Header from "../components/header";
 
 const JBrowse2Viewer = dynamic(() => import("../components/jbrowse2viewer"), {
   ssr: false,
@@ -18,9 +18,7 @@ const JBrowse2Viewer = dynamic(() => import("../components/jbrowse2viewer"), {
 const JBrowse2Page = () => {
   return (
     <>
-      {/* Header/Navbar Code */}
       <Header />
-
       {/* Main Content */}
       <div className={styles.pageContainer}>
         <h1 className={styles.heading}>
@@ -36,6 +34,7 @@ const JBrowse2Page = () => {
         </p> */}
         <JBrowse2Viewer />
       </div>
+
       <Footer />
     </>
   );

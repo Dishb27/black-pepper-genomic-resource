@@ -197,7 +197,7 @@ const Header = () => {
             >
               <Link href="/geneExpViz">Gene Expression Visualization</Link>
               {/* <Link href="/blast">BLAST</Link> */}
-              {/* <Link href="/jbrowse2">JBrowse2</Link> */}
+              <Link href="/jbrowse2">JBrowse2</Link>
               <Link href="/genetool">GeneViz</Link>
               <Link href="/pepperClust">PepperClust</Link>
               <Link href="/peppergo">GO-Pep</Link>

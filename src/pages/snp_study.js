@@ -501,7 +501,8 @@ const SNPMarkers = () => {
                   {filteredResults.length.toLocaleString()} SNPs on chromosome{" "}
                   {chromosome} between positions{" "}
                   {parseInt(chromosomeStart).toLocaleString()}
-                  and {parseInt(chromosomeEnd).toLocaleString()}
+                  {" and "}
+                  {parseInt(chromosomeEnd).toLocaleString()}
                 </div>
               </div>
             </>

@@ -6,7 +6,7 @@ import Image from "next/image";
 import {
   Layers,
   Search,
-  //Globe,
+  Globe,
   //DollarSign,
   Leaf,
   Utensils,
@@ -146,16 +146,16 @@ export default function Home() {
     //   icon: DollarSign,
     //   color: "#3498db",
     // },
-    // {
-    //   src: "https://res.cloudinary.com/dsjtalfn9/image/upload/jbrowse_i4foyb.svg",
-    //   alt: "JBrowse2",
-    //   label: "JBrowse2",
-    //   description:
-    //     "Visualize genome annotations with the feature-rich JBrowse2 platform.",
-    //   link: "/jbrowse2",
-    //   icon: Globe,
-    //   color: "#9b59b6",
-    // },
+    {
+      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/jbrowse_i4foyb.svg",
+      alt: "JBrowse2",
+      label: "JBrowse2",
+      description:
+        "Visualize genome annotations with the feature-rich JBrowse2 platform.",
+      link: "/jbrowse2",
+      icon: Globe,
+      color: "#9b59b6",
+    },
     {
       src: "https://res.cloudinary.com/dsjtalfn9/image/upload/ppExp_czqcch.svg",
       alt: "Expression Heatmap",

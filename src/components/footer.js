@@ -21,7 +21,7 @@ const Footer = () => {
       links: [
         { label: "Pepper-eFP Browser", href: "/efp_browser" },
         // { label: "BLAST", href: "/blast" },
-        // { label: "JBrowse2", href: "/jbrowse2" },
+        { label: "JBrowse2", href: "/jbrowse2" },
         { label: "GeneViz", href: "/genetool" },
         { label: "PepperExp", href: "/pepperExp" },
         { label: "PepperClust", href: "/pepperClust" },
