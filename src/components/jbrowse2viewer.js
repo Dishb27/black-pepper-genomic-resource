@@ -36,11 +36,11 @@ const JBrowse2Viewer = () => {
         adapter: {
           type: "Gff3TabixAdapter",
           gffGzLocation: {
-            uri: "https://piper-nigrum-jbrowse.web.app/Piper_nigrum_edited.sorted.gff.gz",
+            uri: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/Piper_nigrum_edited.sorted.gff.gz",
           },
           index: {
             location: {
-              uri: "https://piper-nigrum-jbrowse.web.app/Piper_nigrum_edited.sorted.gff.gz.tbi",
+              uri: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/Piper_nigrum_edited.sorted.gff.gz.tbi",
             },
             indexType: "TBI",
           },
