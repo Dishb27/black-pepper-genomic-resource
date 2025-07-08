@@ -17,13 +17,13 @@ const JBrowse2Viewer = () => {
         adapter: {
           type: "BgzipFastaAdapter",
           fastaLocation: {
-            uri: "	https://piper-nigrum-jbrowse.web.app/Piper_nigrum.genome.fa.gz",
+            uri: "https://piper-nigrum-jbrowse.web.app/Piper_nigrum.genome.fa.gz",
           },
           faiLocation: {
-            uri: "	https://piper-nigrum-jbrowse.web.app/Piper_nigrum.genome.fa.gz.fai",
+            uri: "https://piper-nigrum-jbrowse.web.app/Piper_nigrum.genome.fa.gz.fai",
           },
           gziLocation: {
-            uri: "	https://piper-nigrum-jbrowse.web.app/Piper_nigrum.genome.fa.gz.gzi",
+            uri: "https://piper-nigrum-jbrowse.web.app/Piper_nigrum.genome.fa.gz.gzi",
           },
         },
       },
@@ -40,7 +40,7 @@ const JBrowse2Viewer = () => {
           },
           index: {
             location: {
-              uri: "	https://piper-nigrum-jbrowse.web.app/Piper_nigrum_edited.sorted.gff.gz.tbi",
+              uri: "https://piper-nigrum-jbrowse.web.app/Piper_nigrum_edited.sorted.gff.gz.tbi",
             },
             indexType: "TBI",
           },
