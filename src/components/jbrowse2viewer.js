@@ -17,7 +17,7 @@ const JBrowse2Viewer = () => {
         adapter: {
           type: "BgzipFastaAdapter",
           fastaLocation: {
-            uri: "https://piper-nigrum-jbrowse.web.app/Piper_nigrum.genome.fa.gz",
+            uri: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/Piper_nigrum.genome.fa.gz",
           },
           faiLocation: {
             uri: "https://piper-nigrum-jbrowse.web.app/Piper_nigrum.genome.fa.gz.fai",
