@@ -15,7 +15,7 @@ import Footer from "../components/footer";
 const Blast = () => {
   const router = useRouter();
 
-  // AWS Backend URL - Update this with your actual AWS instance URL
+  // AWS Backend URL
   const AWS_BACKEND_URL =
     process.env.NEXT_PUBLIC_AWS_BACKEND_URL ||
     (typeof window !== "undefined" && window.location.hostname === "localhost"
@@ -141,50 +141,66 @@ const Blast = () => {
       console.log(`Loading databases from: ${AWS_BACKEND_URL}/databases`);
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
 
       const response = await fetch(`${AWS_BACKEND_URL}/databases`, {
         signal: controller.signal,
+        headers: {
+          Accept: "application/json",
+        },
       });
 
       clearTimeout(timeoutId);
 
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Databases loaded:", data);
-        setDatabases(data.databases || {});
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-        // Auto-select first compatible database if none selected
-        if (
-          !formData.database &&
-          Object.keys(data.databases || {}).length > 0
-        ) {
-          const compatibleDbs = Object.values(data.databases).filter(
-            (dbInfo) => {
-              if (formData.program === "blastn")
-                return dbInfo.type === "nucleotide";
-              if (formData.program === "blastp")
-                return dbInfo.type === "protein";
-              return true;
-            }
-          );
+      const data = await response.json();
+      console.log("Databases response:", data);
 
-          if (compatibleDbs.length > 0) {
-            setFormData((prev) => ({ ...prev, database: compatibleDbs[0][0] }));
+      if (!data.databases || typeof data.databases !== "object") {
+        throw new Error("Invalid database format in response");
+      }
+
+      // Transform the database object to match your expected format
+      const formattedDatabases = {};
+      Object.entries(data.databases).forEach(([dbName, dbInfo]) => {
+        formattedDatabases[dbName] = {
+          type: dbInfo.type,
+          description: dbInfo.description,
+          // Add any other properties you need
+        };
+      });
+
+      setDatabases(formattedDatabases);
+
+      if (!formData.database && Object.keys(formattedDatabases).length > 0) {
+        const compatibleDbs = Object.entries(formattedDatabases).filter(
+          ([, dbInfo]) => {
+            // ignore dbName here with comma
+            if (formData.program === "blastn")
+              return dbInfo.type === "nucleotide";
+            if (formData.program === "blastp") return dbInfo.type === "protein";
+            return true;
           }
+        );
+
+        // Auto-select the first compatible database
+        if (compatibleDbs.length > 0) {
+          const [firstDbName] = compatibleDbs[0]; // only extract the name, ignore info
+          formData.database = firstDbName;
         }
-      } else {
-        console.error("Failed to load databases:", response.status);
       }
     } catch (error) {
       console.error("Error loading databases:", error);
       setNotification({
-        message: "Could not load database information from server.",
+        message: `Could not load database information: ${error.message}`,
         type: "warning",
       });
+      setDatabases({});
     }
   };
-
   const toggleAdvancedOptions = () => {
     setAdvancedOptions(!advancedOptions);
   };
@@ -515,7 +531,7 @@ const Blast = () => {
       </option>,
     ];
 
-    for (const [dbName, dbInfo] of Object.entries(databases)) {
+    Object.entries(databases).forEach(([dbName, dbInfo]) => {
       // Filter databases based on program compatibility
       if (formData.program === "blastn" && dbInfo.type === "nucleotide") {
         options.push(
@@ -530,7 +546,7 @@ const Blast = () => {
           </option>
         );
       }
-    }
+    });
 
     return options;
   };
