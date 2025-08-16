@@ -23,7 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       image-uri: ${{ steps.build-image.outputs.image }}
-      image-digest: ${{ steps.build-image.outputs.digest }}
 
     steps:
       - name: Checkout code
@@ -35,7 +34,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME_AWS }}
           password: ${{ secrets.DOCKERHUB_TOKEN_AWS }}
 
-      - name: Configure AWS credentials (for deployment only)
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -50,7 +49,7 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          # Build and push image to Docker Hub
+          # Build and push image (Dockerfile assumed to be ./aws-backend/Dockerfile)
           docker buildx build \
             --platform linux/amd64 \
             -t ${{ secrets.DOCKERHUB_USERNAME_AWS }}/${{ env.DOCKER_REPOSITORY }}:$IMAGE_TAG \
@@ -58,6 +57,7 @@ jobs:
             --push \
             ./aws-backend
 
+          # Export image URI as step output
           echo "image=${{ secrets.DOCKERHUB_USERNAME_AWS }}/${{ env.DOCKER_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
   deploy-to-ecs:
@@ -76,7 +76,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
+      - name: Render ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
@@ -84,7 +84,7 @@ jobs:
           container-name: pepper-blast-container
           image: ${{ needs.build-and-push.outputs.image-uri }}
 
-      - name: Deploy Amazon ECS task definition
+      - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}
@@ -96,18 +96,16 @@ jobs:
         run: |
           echo "Deployment completed successfully!"
           echo "Image deployed: ${{ needs.build-and-push.outputs.image-uri }}"
-
-          # Optional: Run health check
           aws ecs describe-services \
             --cluster ${{ env.ECS_CLUSTER }} \
             --services ${{ env.ECS_SERVICE }} \
             --query 'services[0].deployments[0].status'
 
-  # Alternative: Deploy to EC2 (if not using ECS)
+  # Optional: EC2 deployment
   deploy-to-ec2:
     runs-on: ubuntu-latest
     needs: build-and-push
-    if: github.ref == 'refs/heads/main' && false # Set to true to enable EC2 deployment
+    if: github.ref == 'refs/heads/main' && false
 
     steps:
       - name: Deploy to EC2
@@ -117,21 +115,14 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Stop existing container
             docker stop pepper-blast-backend || true
             docker rm pepper-blast-backend || true
-
-            # Pull latest image
             docker pull ${{ needs.build-and-push.outputs.image-uri }}
-
-            # Run new container
             docker run -d \
               --name pepper-blast-backend \
               -p 8080:8080 \
               -v /data:/data \
               --restart unless-stopped \
               ${{ needs.build-and-push.outputs.image-uri }}
-
-            # Verify deployment
             sleep 10
             curl -f http://localhost:8080/ || exit 1
