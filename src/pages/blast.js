@@ -17,10 +17,7 @@ const Blast = () => {
 
   // AWS Backend URL
   const AWS_BACKEND_URL =
-    process.env.NEXT_PUBLIC_AWS_BACKEND_URL ||
-    (typeof window !== "undefined" && window.location.hostname === "localhost"
-      ? "http://localhost:8080"
-      : "http://52.205.183.247");
+    process.env.NEXT_PUBLIC_AWS_BACKEND_URL || "http://52.205.183.247";
 
   const [formData, setFormData] = useState({
     sequence: "",
@@ -74,64 +71,18 @@ const Blast = () => {
   // Check if AWS backend is accessible
   const checkBackendStatus = async () => {
     try {
-      console.log(`Attempting to connect to: ${AWS_BACKEND_URL}`);
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-
-      const response = await fetch(`${AWS_BACKEND_URL}/`, {
+      const res = await fetch(`${AWS_BACKEND_URL}/`, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        signal: controller.signal,
+        headers: { "Content-Type": "application/json" },
       });
-
-      clearTimeout(timeoutId);
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Backend response:", data);
+      if (res.ok) {
         setBackendStatus("online");
-        setNotification({
-          message: "Connected to BLAST server successfully!",
-          type: "success",
-        });
       } else {
-        console.error(
-          "Backend returned error:",
-          response.status,
-          response.statusText
-        );
         setBackendStatus("offline");
-        setNotification({
-          message: `BLAST server returned error: ${response.status} ${response.statusText}`,
-          type: "error",
-        });
       }
-    } catch (error) {
-      console.error("Backend connection error:", error);
+    } catch (err) {
+      console.error("Backend check failed:", err);
       setBackendStatus("offline");
-
-      let errorMessage = "Unable to connect to BLAST server. ";
-
-      if (error.name === "AbortError") {
-        errorMessage += "Connection timeout. ";
-      } else if (
-        error.message.includes("NetworkError") ||
-        error.message.includes("fetch")
-      ) {
-        errorMessage += "Network error or invalid URL. ";
-      } else {
-        errorMessage += `Error: ${error.message}. `;
-      }
-
-      errorMessage += "Please check the server configuration.";
-
-      setNotification({
-        message: `${errorMessage}\n\nTrying to connect to: ${AWS_BACKEND_URL}`,
-        type: "error",
-      });
     }
   };
 
@@ -606,6 +557,7 @@ const Blast = () => {
     }
     return null;
   };
+  console.log("Using backend URL:", AWS_BACKEND_URL);
 
   return (
     <>
