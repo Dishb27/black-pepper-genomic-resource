@@ -17,7 +17,7 @@ const Blast = () => {
 
   // AWS Backend URL - Update this with your actual AWS instance URL
   const AWS_BACKEND_URL =
-    process.env.NEXT_PUBLIC_AWS_BACKEND_URL || "http://your-aws-instance-ip";
+    process.env.NEXT_PUBLIC_AWS_BACKEND_URL || "http://52.205.183.247";
 
   const [formData, setFormData] = useState({
     sequence: "",
@@ -71,23 +71,43 @@ const Blast = () => {
   // Check if AWS backend is accessible
   const checkBackendStatus = async () => {
     try {
+      console.log("Checking backend status at:", AWS_BACKEND_URL);
+
       const response = await fetch(`${AWS_BACKEND_URL}/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
+        // Add timeout to prevent hanging
+        signal: AbortSignal.timeout(10000), // 10 second timeout
       });
 
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
+
       if (response.ok) {
+        const data = await response.json();
+        console.log("Backend response:", data);
         setBackendStatus("online");
       } else {
+        console.error("Backend returned error status:", response.status);
         setBackendStatus("offline");
       }
     } catch (error) {
       console.error("Backend connection error:", error);
       setBackendStatus("offline");
+
+      // More specific error messages
+      let errorMessage = "Unable to connect to BLAST server. ";
+      if (error.name === "TimeoutError") {
+        errorMessage += "Connection timed out. ";
+      } else if (error.name === "TypeError") {
+        errorMessage += "Network error or invalid URL. ";
+      }
+      errorMessage += "Please check the server configuration.";
+
       setNotification({
-        message: "Unable to connect to BLAST server. Please try again later.",
+        message: errorMessage,
         type: "error",
       });
     }
@@ -462,19 +482,25 @@ const Blast = () => {
       return (
         <div className={styles.statusIndicator}>
           <FaSpinner className={styles.spinner} />
-          <span>Checking BLAST server...</span>
+          <span>Checking BLAST server at: {AWS_BACKEND_URL}</span>
         </div>
       );
     } else if (backendStatus === "offline") {
       return (
         <div className={`${styles.statusIndicator} ${styles.offline}`}>
           <span>⚠️ BLAST server is offline</span>
+          <div style={{ fontSize: "12px", marginTop: "4px" }}>
+            Trying to connect to: {AWS_BACKEND_URL}
+          </div>
         </div>
       );
     } else {
       return (
         <div className={`${styles.statusIndicator} ${styles.online}`}>
           <span>✅ BLAST server is online</span>
+          <div style={{ fontSize: "12px", marginTop: "4px" }}>
+            Connected to: {AWS_BACKEND_URL}
+          </div>
         </div>
       );
     }
