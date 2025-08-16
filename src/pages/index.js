@@ -7,7 +7,7 @@ import {
   Layers,
   Search,
   Globe,
-  //DollarSign,
+  DollarSign,
   Leaf,
   Utensils,
 } from "lucide-react";
@@ -136,16 +136,16 @@ export default function Home() {
       icon: Leaf,
       color: "#2ecc71",
     },
-    // {
-    //   src: "https://res.cloudinary.com/dsjtalfn9/image/upload/blast_e1jhh1.svg",
-    //   alt: "BLAST",
-    //   label: "BLAST",
-    //   description:
-    //     "Align your sequences against the black pepper genome and proteome using the BLAST tool.",
-    //   link: "/blast",
-    //   icon: DollarSign,
-    //   color: "#3498db",
-    // },
+    {
+      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/blast_e1jhh1.svg",
+      alt: "BLAST",
+      label: "BLAST",
+      description:
+        "Align your sequences against the black pepper genome and proteome using the BLAST tool.",
+      link: "/blast",
+      icon: DollarSign,
+      color: "#3498db",
+    },
     {
       src: "https://res.cloudinary.com/dsjtalfn9/image/upload/jbrowse_i4foyb.svg",
       alt: "JBrowse2",

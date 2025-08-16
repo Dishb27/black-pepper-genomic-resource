@@ -20,7 +20,7 @@ const Footer = () => {
       title: "Tools",
       links: [
         { label: "Pepper-eFP Browser", href: "/efp_browser" },
-        // { label: "BLAST", href: "/blast" },
+        { label: "BLAST", href: "/blast" },
         { label: "JBrowse2", href: "/jbrowse2" },
         { label: "GeneViz", href: "/genetool" },
         { label: "PepperExp", href: "/pepperExp" },

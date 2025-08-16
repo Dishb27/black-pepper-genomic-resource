@@ -450,3 +450,296 @@
     padding: 0.5rem;
   }
 }
+
+/* Add these styles to your resultblast.module.css */
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.headerActions {
+  display: flex;
+  gap: 12px;
+}
+
+.backButton,
+.exportButton,
+.newSearchButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: white;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover,
+.exportButton:hover,
+.newSearchButton:hover {
+  background: #f8f9fa;
+  border-color: #ccc;
+}
+
+.retryButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid #007bff;
+  border-radius: 6px;
+  background: #007bff;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retryButton:hover {
+  background: #0056b3;
+}
+
+.resultsSummary {
+  background: #e3f2fd;
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.resultsSummary h3 {
+  margin: 0;
+  color: #1976d2;
+  font-size: 16px;
+}
+
+.resultHeader {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.resultHeader:hover {
+  background-color: #f8f9fa;
+}
+
+.resultTitleSection {
+  flex: 1;
+  min-width: 0;
+}
+
+.resultId {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  font-family: monospace;
+}
+
+.expandIcon {
+  font-size: 12px;
+  color: #666;
+  margin-left: 12px;
+  user-select: none;
+}
+
+.alignmentTitle {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+}
+
+.alertIcon {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.searchTips {
+  margin-top: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #17a2b8;
+}
+
+.searchTips h4 {
+  margin: 0 0 12px 0;
+  color: #17a2b8;
+  font-size: 14px;
+}
+
+.searchTips ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.searchTips li {
+  margin-bottom: 4px;
+  font-size: 13px;
+  color: #666;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.resultsFooter {
+  margin-top: 40px;
+  padding: 24px;
+  border-top: 1px solid #e9ecef;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.footerActions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.footerInfo {
+  color: #666;
+  font-size: 13px;
+}
+
+.footerInfo p {
+  margin: 0;
+}
+
+.rangeItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+}
+
+.rangeLabel {
+  font-size: 11px;
+  color: #666;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.rangeValue {
+  font-size: 13px;
+  color: #333;
+  font-weight: 500;
+  text-align: center;
+}
+
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.statusIndicator.online {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.statusIndicator.offline {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sequenceTypeIndicator {
+  margin-top: 8px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.sequenceTypeMatch {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.sequenceTypeMismatch {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .headerTop {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .headerActions {
+    justify-content: center;
+  }
+
+  .programInfo {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+  }
+
+  .footerActions {
+    flex-direction: column;
+  }
+
+  .rangeInfo {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .headerActions,
+  .footerActions,
+  .expandIcon {
+    display: none !important;
+  }
+
+  .resultCard {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .alignmentCard {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styles from "../styles/resultblast.module.css";
 import Head from "next/head";
-import { AlignJustify } from "lucide-react";
+import { AlignJustify, Download, ArrowLeft, RefreshCw } from "lucide-react";
 
 const ResultBlast = () => {
   const router = useRouter();
@@ -10,11 +10,16 @@ const ResultBlast = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [program, setProgram] = useState("");
+  const [database, setDatabase] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [programInfo, setProgramInfo] = useState({
     program: "",
     database: "",
   });
+  const [queryId, setQueryId] = useState("");
+  const [executionTime, setExecutionTime] = useState("");
+  const [timestamp, setTimestamp] = useState("");
+  const [expandedResults, setExpandedResults] = useState({});
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -24,36 +29,49 @@ const ResultBlast = () => {
     if (router.query.results) {
       try {
         const parsedResults = JSON.parse(router.query.results);
+        console.log("Parsed results:", parsedResults);
 
-        // Check if there's an error message
+        // Handle error messages from AWS backend
         if (router.query.error) {
           setErrorMessage(router.query.error);
-        } else if (parsedResults.message) {
+        } else if (
+          parsedResults.message &&
+          parsedResults.hits &&
+          parsedResults.hits.length === 0
+        ) {
           setErrorMessage(parsedResults.message);
         }
 
-        // Set program info
-        if (router.query.program) {
-          setProgramInfo({
-            program: router.query.program,
-            database: router.query.database || "",
-          });
-          setProgram(router.query.program);
-        } else if (parsedResults.program && parsedResults.database) {
-          setProgramInfo({
-            program: parsedResults.program,
-            database: parsedResults.database,
-          });
-          setProgram(parsedResults.program);
-        }
+        // Set program and database info from query params or results
+        const programFromQuery =
+          router.query.program || parsedResults.program || "";
+        const databaseFromQuery =
+          router.query.database || parsedResults.database || "";
 
+        setProgramInfo({
+          program: programFromQuery,
+          database: databaseFromQuery,
+        });
+        setProgram(programFromQuery);
+        setDatabase(databaseFromQuery);
+
+        // Set additional metadata if available
+        if (router.query.queryId) setQueryId(router.query.queryId);
+        if (router.query.executionTime)
+          setExecutionTime(router.query.executionTime);
+        if (router.query.timestamp) setTimestamp(router.query.timestamp);
+
+        // Process results
         if (parsedResults?.hits && Array.isArray(parsedResults.hits)) {
-          const formattedResults = parsedResults.hits.map((hit) => ({
+          const formattedResults = parsedResults.hits.map((hit, index) => ({
+            id: hit.id || `hit_${index + 1}`,
             description: hit.description || "No description provided",
             score: hit.score || "N/A",
             evalue: hit.evalue || "N/A",
+            alignLength: hit.alignLength || "N/A",
             alignments:
-              hit.alignments?.map((alignment) => ({
+              hit.alignments?.map((alignment, alignIndex) => ({
+                id: `${index}_${alignIndex}`,
                 querySeq: alignment.querySeq || "N/A",
                 hitSeq: alignment.hitSeq || "N/A",
                 midline: alignment.midline || "N/A",
@@ -62,22 +80,39 @@ const ResultBlast = () => {
                 queryTo: alignment.queryTo || "N/A",
                 hitFrom: alignment.hitFrom || "N/A",
                 hitTo: alignment.hitTo || "N/A",
+                identity: alignment.identity || "N/A",
+                gaps: alignment.gaps || "N/A",
+                bitScore: alignment.bitScore || "N/A",
               })) || [],
           }));
 
           setBlastResults(formattedResults);
+
+          // Initialize expanded state for first result
+          if (formattedResults.length > 0) {
+            setExpandedResults({ 0: true });
+          }
+        } else if (parsedResults.error) {
+          setError(parsedResults.error);
+          setErrorMessage(parsedResults.error);
         } else {
           setError("Invalid BLAST results format.");
+          setErrorMessage("No valid results received from server.");
         }
       } catch (error) {
+        console.error("Error parsing results:", error);
         setError(`Error parsing BLAST results: ${error.message}`);
         setErrorMessage(
-          "Failed to load results. Please try your search again."
+          "Failed to load results. The results data may be corrupted."
         );
       } finally {
         setIsLoading(false);
       }
     } else {
+      setError("No results data found.");
+      setErrorMessage(
+        "No results were provided. Please run a BLAST search first."
+      );
       setIsLoading(false);
     }
   }, [
@@ -86,11 +121,102 @@ const ResultBlast = () => {
     router.query.program,
     router.query.database,
     router.query.error,
+    router.query.queryId,
+    router.query.executionTime,
+    router.query.timestamp,
   ]);
 
   // Function to get the appropriate unit based on program type
   const getLengthUnit = () => {
     return program === "blastn" ? "bp" : "aa";
+  };
+
+  // Function to calculate identity percentage
+  const calculateIdentityPercentage = (identity, alignLength) => {
+    if (identity === "N/A" || alignLength === "N/A") return "N/A";
+    const identityNum = parseInt(identity);
+    const lengthNum = parseInt(alignLength);
+    if (isNaN(identityNum) || isNaN(lengthNum) || lengthNum === 0) return "N/A";
+    return ((identityNum / lengthNum) * 100).toFixed(1) + "%";
+  };
+
+  // Function to format e-value for better readability
+  const formatEValue = (evalue) => {
+    if (evalue === "N/A") return "N/A";
+    const num = parseFloat(evalue);
+    if (isNaN(num)) return evalue;
+    if (num === 0) return "0.0";
+    if (num < 1e-100) return "<1e-100";
+    return num.toExponential(2);
+  };
+
+  // Function to toggle result expansion
+  const toggleResultExpansion = (index) => {
+    setExpandedResults((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
+  // Function to format sequence for display (break long sequences)
+  const formatSequence = (sequence, lineLength = 60) => {
+    if (!sequence || sequence === "N/A") return sequence;
+    const lines = [];
+    for (let i = 0; i < sequence.length; i += lineLength) {
+      lines.push(sequence.substring(i, i + lineLength));
+    }
+    return lines.join("\n");
+  };
+
+  // Function to export results as text
+  const exportResults = () => {
+    if (!blastResults || blastResults.length === 0) return;
+
+    let exportText = `BLAST Search Results\n`;
+    exportText += `Program: ${program}\n`;
+    exportText += `Database: ${database}\n`;
+    if (timestamp)
+      exportText += `Date: ${new Date(timestamp).toLocaleString()}\n`;
+    if (executionTime) exportText += `Execution Time: ${executionTime}ms\n`;
+    if (queryId) exportText += `Query ID: ${queryId}\n`;
+    exportText += `Total Hits: ${blastResults.length}\n`;
+    exportText += `\n${"=".repeat(80)}\n\n`;
+
+    blastResults.forEach((hit, index) => {
+      exportText += `Hit ${index + 1}: ${hit.description}\n`;
+      exportText += `Score: ${hit.score}, E-value: ${formatEValue(
+        hit.evalue
+      )}\n`;
+      exportText += `Length: ${hit.alignLength} ${getLengthUnit()}\n\n`;
+
+      hit.alignments.forEach((alignment, alignIndex) => {
+        exportText += `  Alignment ${alignIndex + 1}:\n`;
+        exportText += `  Query: ${alignment.queryFrom}-${alignment.queryTo}\n`;
+        exportText += `  Hit:   ${alignment.hitFrom}-${alignment.hitTo}\n`;
+        exportText += `  Identity: ${calculateIdentityPercentage(
+          alignment.identity,
+          alignment.alignLength
+        )}\n`;
+        exportText += `  Bit Score: ${alignment.bitScore}\n\n`;
+
+        exportText += `  Query: ${formatSequence(alignment.querySeq)}\n`;
+        exportText += `         ${formatSequence(alignment.midline)}\n`;
+        exportText += `  Hit:   ${formatSequence(alignment.hitSeq)}\n\n`;
+      });
+
+      exportText += `${"-".repeat(60)}\n\n`;
+    });
+
+    // Create and download the file
+    const blob = new Blob([exportText], { type: "text/plain" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `blast_results_${queryId || Date.now()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   };
 
   // Component to display errors or no results messages
@@ -99,6 +225,9 @@ const ResultBlast = () => {
       return (
         <div className={styles.resultsMessage}>
           <div className={styles.alertBox}>
+            <div className={styles.alertIcon}>
+              {errorMessage.includes("No significant matches") ? "🔍" : "⚠️"}
+            </div>
             <h3>Message:</h3>
             <p>{errorMessage}</p>
 
@@ -140,12 +269,41 @@ const ResultBlast = () => {
               </div>
             )}
 
-            <button
-              onClick={() => router.push("/blast")}
-              className={styles.goBackButton}
-            >
-              Go Back to BLAST Search
-            </button>
+            {/* No results found message */}
+            {errorMessage.includes("No significant matches") && (
+              <div className={styles.searchTips}>
+                <h4>Search Tips:</h4>
+                <ul>
+                  <li>Check your sequence for errors</li>
+                  <li>
+                    Try using a less stringent E-value (e.g., 1e-1 instead of
+                    1e-5)
+                  </li>
+                  <li>
+                    Ensure you&apos;re using the correct program (blastn vs
+                    blastp)
+                  </li>
+                  <li>Verify that your sequence is from the right organism</li>
+                </ul>
+              </div>
+            )}
+
+            <div className={styles.actionButtons}>
+              <button
+                onClick={() => router.push("/blast")}
+                className={styles.goBackButton}
+              >
+                <ArrowLeft size={16} />
+                Go Back to BLAST Search
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className={styles.retryButton}
+              >
+                <RefreshCw size={16} />
+                Retry
+              </button>
+            </div>
           </div>
         </div>
       );
@@ -156,12 +314,17 @@ const ResultBlast = () => {
   // Handle loading state
   if (isLoading) {
     return (
-      <div className={styles.container}>
-        <div className={styles.loader}>
-          <div className={styles.spinnerRing}></div>
-          <p>Loading BLAST results...</p>
+      <>
+        <Head>
+          <title>Loading Results - Black Pepper Knowledgebase</title>
+        </Head>
+        <div className={styles.container}>
+          <div className={styles.loader}>
+            <div className={styles.spinnerRing}></div>
+            <p>Loading BLAST results...</p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -174,9 +337,26 @@ const ResultBlast = () => {
 
       <div className={styles.container}>
         <header className={styles.header}>
-          <h1 className={styles.title}>BLAST Search Results</h1>
+          <div className={styles.headerTop}>
+            <h1 className={styles.title}>BLAST Search Results</h1>
+            <div className={styles.headerActions}>
+              <button
+                onClick={() => router.push("/blast")}
+                className={styles.backButton}
+              >
+                <ArrowLeft size={16} />
+                New Search
+              </button>
+              {blastResults && blastResults.length > 0 && (
+                <button onClick={exportResults} className={styles.exportButton}>
+                  <Download size={16} />
+                  Export Results
+                </button>
+              )}
+            </div>
+          </div>
 
-          {/* Display program information */}
+          {/* Display program information and metadata */}
           {programInfo.program && (
             <div className={styles.programInfo}>
               <div className={styles.programTag}>
@@ -191,6 +371,30 @@ const ResultBlast = () => {
                   {programInfo.database}
                 </span>
               </div>
+              {executionTime && (
+                <div className={styles.programTag}>
+                  <span className={styles.programLabel}>Execution Time:</span>
+                  <span className={styles.programValue}>{executionTime}ms</span>
+                </div>
+              )}
+              {timestamp && (
+                <div className={styles.programTag}>
+                  <span className={styles.programLabel}>Date:</span>
+                  <span className={styles.programValue}>
+                    {new Date(timestamp).toLocaleString()}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Results summary */}
+          {blastResults && blastResults.length > 0 && (
+            <div className={styles.resultsSummary}>
+              <h3>
+                Found {blastResults.length} significant match
+                {blastResults.length !== 1 ? "es" : ""}
+              </h3>
             </div>
           )}
         </header>
@@ -202,37 +406,24 @@ const ResultBlast = () => {
         {error && !errorMessage && (
           <div className={styles.errorCard}>
             <div className={styles.errorIcon}>!</div>
-            <p>Error: {error}</p>
-            <button
-              onClick={() => router.push("/blast")}
-              className={styles.goBackButton}
-            >
-              Go Back to BLAST Search
-            </button>
-          </div>
-        )}
-
-        {/* Handle no results */}
-        {(!blastResults || blastResults.length === 0) && !errorMessage && (
-          <div className={styles.noResults}>
-            <div className={styles.noResultsIcon}>
-              <svg viewBox="0 0 24 24" width="48" height="48">
-                <path
-                  fill="currentColor"
-                  d="M11,2V4.07C7.38,4.53 4.53,7.38 4.07,11H2V13H4.07C4.53,16.62 7.38,19.47 11,19.93V22H13V19.93C16.62,19.47 19.47,16.62 19.93,13H22V11H19.93C19.47,7.38 16.62,4.53 13,4.07V2M11,6.08V8H13V6.09C15.5,6.5 17.5,8.5 17.92,11H16V13H17.91C17.5,15.5 15.5,17.5 13,17.92V16H11V17.91C8.5,17.5 6.5,15.5 6.08,13H8V11H6.09C6.5,8.5 8.5,6.5 11,6.08M12,11A1,1 0 0,0 11,12A1,1 0 0,0 12,13A1,1 0 0,0 13,12A1,1 0 0,0 12,11Z"
-                />
-              </svg>
+            <h3>Error Loading Results</h3>
+            <p>{error}</p>
+            <div className={styles.actionButtons}>
+              <button
+                onClick={() => router.push("/blast")}
+                className={styles.goBackButton}
+              >
+                <ArrowLeft size={16} />
+                Go Back to BLAST Search
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className={styles.retryButton}
+              >
+                <RefreshCw size={16} />
+                Retry
+              </button>
             </div>
-            <p>
-              No significant matches were found for your query. Please check the
-              input sequence or try adjusting search parameters.
-            </p>
-            <button
-              onClick={() => router.push("/blast")}
-              className={styles.goBackButton}
-            >
-              Go Back to BLAST Search
-            </button>
           </div>
         )}
 
@@ -241,8 +432,16 @@ const ResultBlast = () => {
           <div className={styles.resultsGrid}>
             {blastResults.map((hit, hitIndex) => (
               <div key={hitIndex} className={styles.resultCard}>
-                <div className={styles.resultHeader}>
-                  <h3 className={styles.resultTitle}>{hit.description}</h3>
+                <div
+                  className={styles.resultHeader}
+                  onClick={() => toggleResultExpansion(hitIndex)}
+                >
+                  <div className={styles.resultTitleSection}>
+                    <h3 className={styles.resultTitle}>
+                      Hit {hitIndex + 1}: {hit.description}
+                    </h3>
+                    <div className={styles.resultId}>ID: {hit.id}</div>
+                  </div>
                   <div className={styles.resultStats}>
                     <div className={styles.statItem}>
                       <span className={styles.statLabel}>Score</span>
@@ -250,78 +449,152 @@ const ResultBlast = () => {
                     </div>
                     <div className={styles.statItem}>
                       <span className={styles.statLabel}>E-value</span>
-                      <span className={styles.statValue}>{hit.evalue}</span>
+                      <span className={styles.statValue}>
+                        {formatEValue(hit.evalue)}
+                      </span>
                     </div>
+                    <div className={styles.statItem}>
+                      <span className={styles.statLabel}>Length</span>
+                      <span className={styles.statValue}>
+                        {hit.alignLength} {getLengthUnit()}
+                      </span>
+                    </div>
+                  </div>
+                  <div className={styles.expandIcon}>
+                    {expandedResults[hitIndex] ? "▼" : "▶"}
                   </div>
                 </div>
 
-                <div className={styles.alignmentsContainer}>
-                  <h4 className={styles.alignmentsTitle}>
-                    <AlignJustify size={18} className={styles.alignmentIcon} />
-                    <span>Alignments</span>
-                  </h4>
+                {expandedResults[hitIndex] && (
+                  <div className={styles.alignmentsContainer}>
+                    <h4 className={styles.alignmentsTitle}>
+                      <AlignJustify
+                        size={18}
+                        className={styles.alignmentIcon}
+                      />
+                      <span>Alignments ({hit.alignments.length})</span>
+                    </h4>
 
-                  {hit.alignments.length > 0 ? (
-                    hit.alignments.map((alignment, alignmentIndex) => (
-                      <div
-                        key={alignmentIndex}
-                        className={styles.alignmentCard}
-                      >
-                        <div className={styles.alignmentInfo}>
-                          <div className={styles.rangeInfo}>
-                            <div className={styles.rangeItem}>
-                              <span className={styles.rangeLabel}>Query</span>
-                              <span className={styles.rangeValue}>
-                                {alignment.queryFrom} - {alignment.queryTo}
-                              </span>
+                    {hit.alignments.length > 0 ? (
+                      hit.alignments.map((alignment, alignmentIndex) => (
+                        <div
+                          key={alignment.id}
+                          className={styles.alignmentCard}
+                        >
+                          <div className={styles.alignmentInfo}>
+                            <h5 className={styles.alignmentTitle}>
+                              Alignment {alignmentIndex + 1}
+                            </h5>
+                            <div className={styles.rangeInfo}>
+                              <div className={styles.rangeItem}>
+                                <span className={styles.rangeLabel}>Query</span>
+                                <span className={styles.rangeValue}>
+                                  {alignment.queryFrom} - {alignment.queryTo}
+                                </span>
+                              </div>
+                              <div className={styles.rangeItem}>
+                                <span className={styles.rangeLabel}>Hit</span>
+                                <span className={styles.rangeValue}>
+                                  {alignment.hitFrom} - {alignment.hitTo}
+                                </span>
+                              </div>
+                              <div className={styles.rangeItem}>
+                                <span className={styles.rangeLabel}>
+                                  Length
+                                </span>
+                                <span className={styles.rangeValue}>
+                                  {alignment.alignLength} {getLengthUnit()}
+                                </span>
+                              </div>
+                              <div className={styles.rangeItem}>
+                                <span className={styles.rangeLabel}>
+                                  Identity
+                                </span>
+                                <span className={styles.rangeValue}>
+                                  {calculateIdentityPercentage(
+                                    alignment.identity,
+                                    alignment.alignLength
+                                  )}
+                                  {alignment.identity !== "N/A" &&
+                                    alignment.alignLength !== "N/A" &&
+                                    ` (${alignment.identity}/${alignment.alignLength})`}
+                                </span>
+                              </div>
+                              <div className={styles.rangeItem}>
+                                <span className={styles.rangeLabel}>Gaps</span>
+                                <span className={styles.rangeValue}>
+                                  {alignment.gaps}
+                                </span>
+                              </div>
+                              <div className={styles.rangeItem}>
+                                <span className={styles.rangeLabel}>
+                                  Bit Score
+                                </span>
+                                <span className={styles.rangeValue}>
+                                  {alignment.bitScore}
+                                </span>
+                              </div>
                             </div>
-                            <div className={styles.rangeItem}>
-                              <span className={styles.rangeLabel}>Hit</span>
-                              <span className={styles.rangeValue}>
-                                {alignment.hitFrom} - {alignment.hitTo}
-                              </span>
+                          </div>
+
+                          <div className={styles.sequenceViewer}>
+                            <div className={styles.sequencePair}>
+                              <div className={styles.sequenceLabel}>Query</div>
+                              <pre className={styles.querySeq}>
+                                {alignment.querySeq}
+                              </pre>
                             </div>
-                            <div className={styles.rangeItem}>
-                              <span className={styles.rangeLabel}>Length</span>
-                              <span className={styles.rangeValue}>
-                                {alignment.alignLength} {getLengthUnit()}
-                              </span>
+
+                            <div className={styles.sequencePair}>
+                              <div className={styles.sequenceLabel}></div>
+                              <pre className={styles.midline}>
+                                {alignment.midline}
+                              </pre>
+                            </div>
+
+                            <div className={styles.sequencePair}>
+                              <div className={styles.sequenceLabel}>Hit</div>
+                              <pre className={styles.hitSeq}>
+                                {alignment.hitSeq}
+                              </pre>
                             </div>
                           </div>
                         </div>
-
-                        <div className={styles.sequenceViewer}>
-                          <div className={styles.sequencePair}>
-                            <div className={styles.sequenceLabel}>Query</div>
-                            <pre className={styles.querySeq}>
-                              {alignment.querySeq}
-                            </pre>
-                          </div>
-
-                          <div className={styles.sequencePair}>
-                            <div className={styles.sequenceLabel}></div>
-                            <pre className={styles.midline}>
-                              {alignment.midline}
-                            </pre>
-                          </div>
-
-                          <div className={styles.sequencePair}>
-                            <div className={styles.sequenceLabel}>Hit</div>
-                            <pre className={styles.hitSeq}>
-                              {alignment.hitSeq}
-                            </pre>
-                          </div>
-                        </div>
+                      ))
+                    ) : (
+                      <div className={styles.noAlignments}>
+                        <p>No alignments available for this hit</p>
                       </div>
-                    ))
-                  ) : (
-                    <div className={styles.noAlignments}>
-                      <p>No alignments available</p>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Footer with additional actions */}
+        {blastResults && blastResults.length > 0 && (
+          <div className={styles.resultsFooter}>
+            <div className={styles.footerActions}>
+              <button
+                onClick={() => router.push("/blast")}
+                className={styles.newSearchButton}
+              >
+                <ArrowLeft size={16} />
+                Run New Search
+              </button>
+              <button onClick={exportResults} className={styles.exportButton}>
+                <Download size={16} />
+                Export All Results
+              </button>
+            </div>
+            <div className={styles.footerInfo}>
+              <p>
+                Results generated using {program} against {database}
+                {queryId && ` (Query ID: ${queryId})`}
+              </p>
+            </div>
           </div>
         )}
       </div>
