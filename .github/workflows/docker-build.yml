@@ -2,11 +2,11 @@ name: Build and Push CyVerse BLAST Backend
 
 on:
   push:
-    branches: [main, master]
+    branches: [main]
     paths:
       - "cyverse-backend/**"
   pull_request:
-    branches: [main, master]
+    branches: [main]
     paths:
       - "cyverse-backend/**"
   workflow_dispatch:
@@ -15,7 +15,7 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     outputs:
-      image-digest: ${{ steps.get-digest.outputs.digest }}
+      image-digest: ${{ steps.set-digest.outputs.digest }}
 
     steps:
       - name: Checkout code
@@ -31,21 +31,18 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push Docker image
+        id: build-image
         uses: docker/build-push-action@v5
         with:
           context: ./cyverse-backend
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/pepper-blast-node:latest
           platforms: linux/amd64,linux/arm64
+          outputs: type=digest
 
-      - name: Get Docker image digest
-        id: get-digest
-        run: |
-          IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/pepper-blast-node:latest
-          DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' $IMAGE)
-          echo "CyVerse backend image pushed successfully!"
-          echo "Image digest: $DIGEST"
-          echo "::set-output name=digest::$DIGEST"
+      - name: Set output digest
+        id: set-digest
+        run: echo "digest=${{ steps.build-image.outputs.digest }}" >> $GITHUB_OUTPUT
 
   deploy:
     runs-on: ubuntu-latest
@@ -55,5 +52,6 @@ jobs:
         run: |
           DIGEST="${{ needs.build-and-push.outputs.image-digest }}"
           echo "Deploying app with Docker image: $DIGEST"
-          # Here you can pull and run the exact image
-          # Example: docker pull $DIGEST
+          # Example: pull and run the exact image
+          # docker pull $DIGEST
+          # docker run -d -p 8080:8080 $DIGEST
