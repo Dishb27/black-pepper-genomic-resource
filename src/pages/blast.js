@@ -17,7 +17,10 @@ const Blast = () => {
 
   // AWS Backend URL - Update this with your actual AWS instance URL
   const AWS_BACKEND_URL =
-    process.env.NEXT_PUBLIC_AWS_BACKEND_URL || "http://52.205.183.247";
+    process.env.NEXT_PUBLIC_AWS_BACKEND_URL ||
+    (typeof window !== "undefined" && window.location.hostname === "localhost"
+      ? "http://localhost:8080"
+      : "http://52.205.183.247");
 
   const [formData, setFormData] = useState({
     sequence: "",
@@ -71,43 +74,62 @@ const Blast = () => {
   // Check if AWS backend is accessible
   const checkBackendStatus = async () => {
     try {
-      console.log("Checking backend status at:", AWS_BACKEND_URL);
+      console.log(`Attempting to connect to: ${AWS_BACKEND_URL}`);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
       const response = await fetch(`${AWS_BACKEND_URL}/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        // Add timeout to prevent hanging
-        signal: AbortSignal.timeout(10000), // 10 second timeout
+        signal: controller.signal,
       });
 
-      console.log("Response status:", response.status);
-      console.log("Response ok:", response.ok);
+      clearTimeout(timeoutId);
 
       if (response.ok) {
         const data = await response.json();
         console.log("Backend response:", data);
         setBackendStatus("online");
+        setNotification({
+          message: "Connected to BLAST server successfully!",
+          type: "success",
+        });
       } else {
-        console.error("Backend returned error status:", response.status);
+        console.error(
+          "Backend returned error:",
+          response.status,
+          response.statusText
+        );
         setBackendStatus("offline");
+        setNotification({
+          message: `BLAST server returned error: ${response.status} ${response.statusText}`,
+          type: "error",
+        });
       }
     } catch (error) {
       console.error("Backend connection error:", error);
       setBackendStatus("offline");
 
-      // More specific error messages
       let errorMessage = "Unable to connect to BLAST server. ";
-      if (error.name === "TimeoutError") {
-        errorMessage += "Connection timed out. ";
-      } else if (error.name === "TypeError") {
+
+      if (error.name === "AbortError") {
+        errorMessage += "Connection timeout. ";
+      } else if (
+        error.message.includes("NetworkError") ||
+        error.message.includes("fetch")
+      ) {
         errorMessage += "Network error or invalid URL. ";
+      } else {
+        errorMessage += `Error: ${error.message}. `;
       }
+
       errorMessage += "Please check the server configuration.";
 
       setNotification({
-        message: errorMessage,
+        message: `${errorMessage}\n\nTrying to connect to: ${AWS_BACKEND_URL}`,
         type: "error",
       });
     }
@@ -116,13 +138,50 @@ const Blast = () => {
   // Load available databases from AWS backend
   const loadDatabases = async () => {
     try {
-      const response = await fetch(`${AWS_BACKEND_URL}/databases`);
+      console.log(`Loading databases from: ${AWS_BACKEND_URL}/databases`);
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+
+      const response = await fetch(`${AWS_BACKEND_URL}/databases`, {
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
       if (response.ok) {
         const data = await response.json();
+        console.log("Databases loaded:", data);
         setDatabases(data.databases || {});
+
+        // Auto-select first compatible database if none selected
+        if (
+          !formData.database &&
+          Object.keys(data.databases || {}).length > 0
+        ) {
+          const compatibleDbs = Object.values(data.databases).filter(
+            (dbInfo) => {
+              if (formData.program === "blastn")
+                return dbInfo.type === "nucleotide";
+              if (formData.program === "blastp")
+                return dbInfo.type === "protein";
+              return true;
+            }
+          );
+
+          if (compatibleDbs.length > 0) {
+            setFormData((prev) => ({ ...prev, database: compatibleDbs[0][0] }));
+          }
+        }
+      } else {
+        console.error("Failed to load databases:", response.status);
       }
     } catch (error) {
       console.error("Error loading databases:", error);
+      setNotification({
+        message: "Could not load database information from server.",
+        type: "warning",
+      });
     }
   };
 
@@ -505,6 +564,32 @@ const Blast = () => {
       );
     }
   };
+  const DebugInfo = () => {
+    if (process.env.NODE_ENV === "development") {
+      return (
+        <div
+          style={{
+            background: "#f0f0f0",
+            padding: "10px",
+            margin: "10px 0",
+            fontSize: "12px",
+            fontFamily: "monospace",
+          }}
+        >
+          <strong>Debug Info:</strong>
+          <br />
+          Backend URL: {AWS_BACKEND_URL}
+          <br />
+          Environment: {process.env.NODE_ENV}
+          <br />
+          Backend Status: {backendStatus}
+          <br />
+          Available Databases: {Object.keys(databases).length}
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <>
@@ -523,11 +608,14 @@ const Blast = () => {
         <div className={styles.blastContainer}>
           <h1 className={styles.blastTitle}>BLAST Search</h1>
 
+          <DebugInfo />
+
           <BackendStatusIndicator />
 
           {notification.message && (
             <div
               className={`${styles.notification} ${styles[notification.type]}`}
+              style={{ whiteSpace: "pre-line" }}
             >
               {notification.message}
             </div>
