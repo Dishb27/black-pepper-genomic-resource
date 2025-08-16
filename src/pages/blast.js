@@ -17,7 +17,7 @@ const Blast = () => {
 
   // AWS Backend URL - Update this with your actual AWS instance URL
   const AWS_BACKEND_URL =
-    process.env.NEXT_PUBLIC_AWS_BACKEND_URL || "http://52.205.183.247";
+    process.env.NEXT_PUBLIC_AWS_BACKEND_URL || "http://52.205.183.247:8080";
 
   const [formData, setFormData] = useState({
     sequence: "",
