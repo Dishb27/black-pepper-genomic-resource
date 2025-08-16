@@ -1,0 +1,137 @@
+name: Build and Deploy AWS BLAST Backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "aws-backend/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "aws-backend/**"
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1 # Change to your preferred region
+  DOCKER_REPOSITORY: pepper-blast-aws-backend
+  ECS_SERVICE: pepper-blast-service
+  ECS_CLUSTER: pepper-blast-cluster
+  ECS_TASK_DEFINITION: pepper-blast-task
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    outputs:
+      image-uri: ${{ steps.build-image.outputs.image }}
+      image-digest: ${{ steps.build-image.outputs.digest }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME_AWS }}
+          password: ${{ secrets.DOCKERHUB_TOKEN_AWS }}
+
+      - name: Configure AWS credentials (for deployment only)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build, tag, and push image to Docker Hub
+        id: build-image
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          # Build and push image to Docker Hub
+          docker buildx build \
+            --platform linux/amd64 \
+            -t ${{ secrets.DOCKERHUB_USERNAME_AWS }}/${{ env.DOCKER_REPOSITORY }}:$IMAGE_TAG \
+            -t ${{ secrets.DOCKERHUB_USERNAME_AWS }}/${{ env.DOCKER_REPOSITORY }}:latest \
+            --push \
+            ./aws-backend
+
+          echo "image=${{ secrets.DOCKERHUB_USERNAME_AWS }}/${{ env.DOCKER_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+  deploy-to-ecs:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: .aws/task-definition.json
+          container-name: pepper-blast-container
+          image: ${{ needs.build-and-push.outputs.image-uri }}
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
+
+      - name: Verify deployment
+        run: |
+          echo "Deployment completed successfully!"
+          echo "Image deployed: ${{ needs.build-and-push.outputs.image-uri }}"
+
+          # Optional: Run health check
+          aws ecs describe-services \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --services ${{ env.ECS_SERVICE }} \
+            --query 'services[0].deployments[0].status'
+
+  # Alternative: Deploy to EC2 (if not using ECS)
+  deploy-to-ec2:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main' && false # Set to true to enable EC2 deployment
+
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Stop existing container
+            docker stop pepper-blast-backend || true
+            docker rm pepper-blast-backend || true
+
+            # Pull latest image
+            docker pull ${{ needs.build-and-push.outputs.image-uri }}
+
+            # Run new container
+            docker run -d \
+              --name pepper-blast-backend \
+              -p 8080:8080 \
+              -v /data:/data \
+              --restart unless-stopped \
+              ${{ needs.build-and-push.outputs.image-uri }}
+
+            # Verify deployment
+            sleep 10
+            curl -f http://localhost:8080/ || exit 1
