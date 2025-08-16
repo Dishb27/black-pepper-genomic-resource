@@ -15,7 +15,7 @@ import Footer from "../components/footer";
 const Blast = () => {
   const router = useRouter();
 
-  // AWS Backend URL
+  // AWS Backend URL - Update this with your actual AWS instance URL
   const AWS_BACKEND_URL =
     process.env.NEXT_PUBLIC_AWS_BACKEND_URL || "http://52.205.183.247";
 
@@ -71,87 +71,41 @@ const Blast = () => {
   // Check if AWS backend is accessible
   const checkBackendStatus = async () => {
     try {
-      const res = await fetch(`${AWS_BACKEND_URL}/`, {
+      const response = await fetch(`${AWS_BACKEND_URL}/`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-      if (res.ok) {
+
+      if (response.ok) {
         setBackendStatus("online");
       } else {
         setBackendStatus("offline");
       }
-    } catch (err) {
-      console.error("Backend check failed:", err);
+    } catch (error) {
+      console.error("Backend connection error:", error);
       setBackendStatus("offline");
+      setNotification({
+        message: "Unable to connect to BLAST server. Please try again later.",
+        type: "error",
+      });
     }
   };
 
   // Load available databases from AWS backend
   const loadDatabases = async () => {
     try {
-      console.log(`Loading databases from: ${AWS_BACKEND_URL}/databases`);
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000);
-
-      const response = await fetch(`${AWS_BACKEND_URL}/databases`, {
-        signal: controller.signal,
-        headers: {
-          Accept: "application/json",
-        },
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log("Databases response:", data);
-
-      if (!data.databases || typeof data.databases !== "object") {
-        throw new Error("Invalid database format in response");
-      }
-
-      // Transform the database object to match your expected format
-      const formattedDatabases = {};
-      Object.entries(data.databases).forEach(([dbName, dbInfo]) => {
-        formattedDatabases[dbName] = {
-          type: dbInfo.type,
-          description: dbInfo.description,
-          // Add any other properties you need
-        };
-      });
-
-      setDatabases(formattedDatabases);
-
-      if (!formData.database && Object.keys(formattedDatabases).length > 0) {
-        const compatibleDbs = Object.entries(formattedDatabases).filter(
-          ([, dbInfo]) => {
-            // ignore dbName here with comma
-            if (formData.program === "blastn")
-              return dbInfo.type === "nucleotide";
-            if (formData.program === "blastp") return dbInfo.type === "protein";
-            return true;
-          }
-        );
-
-        // Auto-select the first compatible database
-        if (compatibleDbs.length > 0) {
-          const [firstDbName] = compatibleDbs[0]; // only extract the name, ignore info
-          formData.database = firstDbName;
-        }
+      const response = await fetch(`${AWS_BACKEND_URL}/databases`);
+      if (response.ok) {
+        const data = await response.json();
+        setDatabases(data.databases || {});
       }
     } catch (error) {
       console.error("Error loading databases:", error);
-      setNotification({
-        message: `Could not load database information: ${error.message}`,
-        type: "warning",
-      });
-      setDatabases({});
     }
   };
+
   const toggleAdvancedOptions = () => {
     setAdvancedOptions(!advancedOptions);
   };
@@ -482,7 +436,7 @@ const Blast = () => {
       </option>,
     ];
 
-    Object.entries(databases).forEach(([dbName, dbInfo]) => {
+    for (const [dbName, dbInfo] of Object.entries(databases)) {
       // Filter databases based on program compatibility
       if (formData.program === "blastn" && dbInfo.type === "nucleotide") {
         options.push(
@@ -497,7 +451,7 @@ const Blast = () => {
           </option>
         );
       }
-    });
+    }
 
     return options;
   };
@@ -508,56 +462,23 @@ const Blast = () => {
       return (
         <div className={styles.statusIndicator}>
           <FaSpinner className={styles.spinner} />
-          <span>Checking BLAST server at: {AWS_BACKEND_URL}</span>
+          <span>Checking BLAST server...</span>
         </div>
       );
     } else if (backendStatus === "offline") {
       return (
         <div className={`${styles.statusIndicator} ${styles.offline}`}>
           <span>⚠️ BLAST server is offline</span>
-          <div style={{ fontSize: "12px", marginTop: "4px" }}>
-            Trying to connect to: {AWS_BACKEND_URL}
-          </div>
         </div>
       );
     } else {
       return (
         <div className={`${styles.statusIndicator} ${styles.online}`}>
           <span>✅ BLAST server is online</span>
-          <div style={{ fontSize: "12px", marginTop: "4px" }}>
-            Connected to: {AWS_BACKEND_URL}
-          </div>
         </div>
       );
     }
   };
-  const DebugInfo = () => {
-    if (process.env.NODE_ENV === "development") {
-      return (
-        <div
-          style={{
-            background: "#f0f0f0",
-            padding: "10px",
-            margin: "10px 0",
-            fontSize: "12px",
-            fontFamily: "monospace",
-          }}
-        >
-          <strong>Debug Info:</strong>
-          <br />
-          Backend URL: {AWS_BACKEND_URL}
-          <br />
-          Environment: {process.env.NODE_ENV}
-          <br />
-          Backend Status: {backendStatus}
-          <br />
-          Available Databases: {Object.keys(databases).length}
-        </div>
-      );
-    }
-    return null;
-  };
-  console.log("Using backend URL:", AWS_BACKEND_URL);
 
   return (
     <>
@@ -576,14 +497,11 @@ const Blast = () => {
         <div className={styles.blastContainer}>
           <h1 className={styles.blastTitle}>BLAST Search</h1>
 
-          <DebugInfo />
-
           <BackendStatusIndicator />
 
           {notification.message && (
             <div
               className={`${styles.notification} ${styles[notification.type]}`}
-              style={{ whiteSpace: "pre-line" }}
             >
               {notification.message}
             </div>
