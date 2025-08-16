@@ -1,3 +1,4 @@
+# Use Node.js 18 slim image
 FROM node:18-slim
 
 # Install system dependencies including BLAST+
@@ -10,42 +11,37 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-# Verify BLAST+ installation
+# Verify BLAST installation
 RUN blastn -version
 
-# Create non-root user
+# Create non-root user for security
 RUN groupadd -r blastuser && useradd -r -g blastuser blastuser
 
 # Set working directory
 WORKDIR /app
 
 # Copy package files
-COPY package.json package-lock.json* ./
+COPY package.json ./
 
-# Install dependencies
-RUN npm ci --only=production && npm cache clean --force
+# Install dependencies using npm install instead of npm ci
+# Since we don't have a package-lock.json file
+RUN npm install --only=production && npm cache clean --force
 
 # Copy application code
-COPY server.js ./
+COPY . .
 
-# Create directories and set permissions
-RUN mkdir -p /data /tmp/uploads && \
-    chown -R blastuser:blastuser /app /data /tmp/uploads
-
-# Switch to non-root user
-USER blastuser
-
-# Set environment variables
-ENV NODE_ENV=production
-ENV PORT=8080
+# Create necessary directories
+RUN mkdir -p /data/blast_db /data/uploads /data/results && \
+    chown -R blastuser:blastuser /app /data
 
 # Expose port
 EXPOSE 8080
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8080/ || exit 1
-
-# Use dumb-init for proper signal handling
+# Use dumb-init to handle signals properly
 ENTRYPOINT ["dumb-init", "--"]
+
+# Switch to non-root user
+USER blastuser
+
+# Start the application
 CMD ["node", "server.js"]
