@@ -18,11 +18,20 @@ export default async function handler(req, res) {
       // Prepare placeholders for the IN clause based on the number of IDs
       const placeholders = geneIds.map(() => "?").join(",");
 
-      // Execute the query to retrieve gene data for the specified IDs
+      // Execute the query to retrieve complete gene data for the specified IDs
+      // Updated to include all columns from the database schema
       const [rows] = await connection.execute(
-        `SELECT GeneID, Chromosome, GeneRange, NumberOfExons, 
-                ExonRanges as ExonRange, NumberOfIntrons, IntronRanges as IntronRange
-         FROM gene
+        `SELECT 
+          GeneID, 
+          Chromosome, 
+          GeneRange, 
+          NumberOfExons,
+          ExonRanges as ExonRange, 
+          NumberOfIntrons, 
+          IntronRanges as IntronRange,
+          CDS_Sequence,
+          ProteinSequence
+         FROM gene 
          WHERE GeneID IN (${placeholders})`,
         geneIds
       );

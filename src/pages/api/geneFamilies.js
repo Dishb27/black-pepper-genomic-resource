@@ -1,12 +1,17 @@
 // pages/api/geneFamilies.js
-
 import pool from "../../../lib/db";
+
 export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
-      const [rows] = await pool.query(
-        "SELECT DISTINCT TF_Family FROM tf_family"
-      );
+      const [rows] = await pool.query(`
+        SELECT 
+          tf.TF_Family,
+          COUNT(tf.GeneID) as Gene_Count
+        FROM tf_family tf
+        GROUP BY tf.TF_Family
+        ORDER BY tf.TF_Family
+      `);
       res.status(200).json(rows);
     } catch (error) {
       console.error("Database error:", error);

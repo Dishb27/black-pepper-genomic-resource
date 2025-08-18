@@ -4,6 +4,7 @@ import GeneStructure from "../components/GeneStructure";
 import styles from "../styles/genetool.module.css";
 import Header from "../components/header";
 import Footer from "../components/footer";
+
 const MAX_GENES = 5;
 
 const GeneToolPage = () => {
@@ -12,6 +13,7 @@ const GeneToolPage = () => {
   const [error, setError] = useState("");
   const [invalidGeneIds, setInvalidGeneIds] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [rawGeneData, setRawGeneData] = useState([]);
 
   const fetchGeneData = async (ids) => {
     setIsLoading(true);
@@ -30,6 +32,9 @@ const GeneToolPage = () => {
       }
 
       const fetchedGenes = await response.json();
+
+      // Store raw data for download
+      setRawGeneData(fetchedGenes);
 
       // Check which IDs were not found
       const fetchedIds = fetchedGenes.map((gene) => gene.GeneID.toUpperCase());
@@ -106,15 +111,120 @@ const GeneToolPage = () => {
     setGeneDetails([]);
     setError("");
     setInvalidGeneIds([]);
+    setRawGeneData([]);
   };
 
   const handleExample = () => {
     setGeneIds("Pn1.2085, Pn1.102, Pn10.1094, Pn11.2697, Pn15.2213");
   };
 
-  // const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  // const toggleDropdown = (index) =>
-  //   setOpenDropdown(openDropdown === index ? null : index);
+  // Function to download gene data as CSV
+  const downloadCSV = () => {
+    if (rawGeneData.length === 0) {
+      alert("No data available to download.");
+      return;
+    }
+
+    // Define CSV headers based on database structure
+    const headers = [
+      "GeneID",
+      "Chromosome",
+      "GeneRange",
+      "NumberOfExons",
+      "ExonRanges",
+      "NumberOfIntrons",
+      "IntronRanges",
+      "CDS_Sequence",
+      "ProteinSequence",
+    ];
+
+    // Create CSV content
+    const csvContent = [
+      headers.join(","), // Header row
+      ...rawGeneData.map((gene) =>
+        [
+          gene.GeneID || "",
+          gene.Chromosome || "",
+          gene.GeneRange || "",
+          gene.NumberOfExons || 0,
+          `"${gene.ExonRange || ""}"`, // Wrap in quotes to handle commas
+          gene.NumberOfIntrons || 0,
+          `"${gene.IntronRange || ""}"`, // Wrap in quotes to handle commas
+          `"${gene.CDS_Sequence || ""}"`, // Wrap in quotes for long sequences
+          `"${gene.ProteinSequence || ""}"`, // Wrap in quotes for long sequences
+        ].join(",")
+      ),
+    ].join("\n");
+
+    // Create and download file
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `gene_data_${new Date().toISOString().split("T")[0]}.csv`
+    );
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Function to download gene data as TSV
+  const downloadTSV = () => {
+    if (rawGeneData.length === 0) {
+      alert("No data available to download.");
+      return;
+    }
+
+    // Define TSV headers
+    const headers = [
+      "GeneID",
+      "Chromosome",
+      "GeneRange",
+      "NumberOfExons",
+      "ExonRanges",
+      "NumberOfIntrons",
+      "IntronRanges",
+      "CDS_Sequence",
+      "ProteinSequence",
+    ];
+
+    // Create TSV content
+    const tsvContent = [
+      headers.join("\t"), // Header row
+      ...rawGeneData.map((gene) =>
+        [
+          gene.GeneID || "",
+          gene.Chromosome || "",
+          gene.GeneRange || "",
+          gene.NumberOfExons || 0,
+          gene.ExonRange || "",
+          gene.NumberOfIntrons || 0,
+          gene.IntronRange || "",
+          gene.CDS_Sequence || "",
+          gene.ProteinSequence || "",
+        ].join("\t")
+      ),
+    ].join("\n");
+
+    // Create and download file
+    const blob = new Blob([tsvContent], {
+      type: "text/tab-separated-values;charset=utf-8;",
+    });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `gene_data_${new Date().toISOString().split("T")[0]}.tsv`
+    );
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   // Customize styles for gene structure
   const exonStyles = {
@@ -189,6 +299,7 @@ const GeneToolPage = () => {
           )}
         </div>
 
+        {/* Gene Structure Visualizations */}
         <div className={styles.results}>
           {geneDetails.map((gene) =>
             gene ? (
@@ -227,6 +338,139 @@ const GeneToolPage = () => {
             ) : null
           )}
         </div>
+
+        {/* Detailed Gene Information Table */}
+        {rawGeneData.length > 0 && (
+          <div className={styles.tableSection}>
+            <div className={styles.tableHeader}>
+              <div className={styles.tableHeaderLeft}>
+                <h2 className={styles.tableTitle}>Detailed Gene Information</h2>
+                <p className={styles.tableDescription}>
+                  Complete gene data including chromosomal locations, exact
+                  positions, and sequences.
+                </p>
+              </div>
+
+              {/* Download Section moved into table container */}
+              <div className={styles.downloadSection}>
+                <h3 className={styles.downloadTitle}>Download Complete Data</h3>
+                <p className={styles.downloadDescription}>
+                  Get the complete gene information including full sequences for
+                  detailed analysis.
+                </p>
+                <div className={styles.downloadButtons}>
+                  <button
+                    type="button"
+                    className={styles.downloadBtn}
+                    onClick={downloadCSV}
+                  >
+                    <i className="fas fa-download"></i> Download CSV
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.downloadBtn}
+                    onClick={downloadTSV}
+                  >
+                    <i className="fas fa-download"></i> Download TSV
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.tableContainer}>
+              <table className={styles.geneTable}>
+                <thead>
+                  <tr>
+                    <th>Gene ID</th>
+                    <th>Chromosome</th>
+                    <th>Gene Range</th>
+                    <th>Exons</th>
+                    <th>Exon Ranges</th>
+                    <th>Introns</th>
+                    <th>Intron Ranges</th>
+                    <th>CDS Sequence</th>
+                    <th>Protein Sequence</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {rawGeneData.map((gene, index) => (
+                    <tr key={gene.GeneID || index}>
+                      <td className={styles.geneIdCell}>
+                        {gene.GeneID || "-"}
+                      </td>
+                      <td>{gene.Chromosome || "-"}</td>
+                      <td>{gene.GeneRange || "-"}</td>
+                      <td className={styles.numberCell}>
+                        {gene.NumberOfExons || 0}
+                      </td>
+                      <td className={styles.sequenceCell}>
+                        {gene.ExonRange ? (
+                          <div className={styles.sequencePreview}>
+                            {gene.ExonRange.length > 50
+                              ? `${gene.ExonRange.substring(0, 50)}...`
+                              : gene.ExonRange}
+                          </div>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                      <td className={styles.numberCell}>
+                        {gene.NumberOfIntrons || 0}
+                      </td>
+                      <td className={styles.sequenceCell}>
+                        {gene.IntronRange && gene.IntronRange !== "-" ? (
+                          <div className={styles.sequencePreview}>
+                            {gene.IntronRange.length > 50
+                              ? `${gene.IntronRange.substring(0, 50)}...`
+                              : gene.IntronRange}
+                          </div>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                      <td className={styles.sequenceCell}>
+                        {gene.CDS_Sequence ? (
+                          <div className={styles.sequencePreview}>
+                            {gene.CDS_Sequence.length > 30
+                              ? `${gene.CDS_Sequence.substring(0, 30)}...`
+                              : gene.CDS_Sequence}
+                            <div className={styles.sequenceLength}>
+                              ({gene.CDS_Sequence.length} bp)
+                            </div>
+                          </div>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                      <td className={styles.sequenceCell}>
+                        {gene.ProteinSequence ? (
+                          <div className={styles.sequencePreview}>
+                            {gene.ProteinSequence.length > 30
+                              ? `${gene.ProteinSequence.substring(0, 30)}...`
+                              : gene.ProteinSequence}
+                            <div className={styles.sequenceLength}>
+                              ({gene.ProteinSequence.length} aa)
+                            </div>
+                          </div>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className={styles.tableNote}>
+              <i className="fas fa-info-circle"></i>
+              <span>
+                Sequences are truncated for display. Download the complete data
+                using the buttons above for full sequences.
+              </span>
+            </div>
+          </div>
+        )}
       </div>
       <Footer />
     </>

@@ -252,3 +252,118 @@
     gap: 10px;
   }
 }
+
+/* Add these styles to your existing gene_families.module.css */
+
+/* Update existing family card to accommodate download section */
+.familyCard {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.familyCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.familyCardContent {
+  padding: 1.5rem;
+  cursor: pointer;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Download section styles */
+.downloadSection {
+  border-top: 1px solid #e5e7eb;
+  padding: 1rem 1.5rem;
+  background-color: #f9fafb;
+}
+
+.downloadButtons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.downloadBtn {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 80px;
+  justify-content: center;
+}
+
+.downloadBtn:hover:not(:disabled) {
+  background: #4338ca;
+  transform: translateY(-1px);
+}
+
+.downloadBtn:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.downloadBtn i {
+  font-size: 0.75rem;
+}
+
+.downloadBtn:first-child {
+  background: #059669;
+}
+
+.downloadBtn:first-child:hover:not(:disabled) {
+  background: #047857;
+}
+
+.downloadBtn:last-child {
+  background: #dc2626;
+}
+
+.downloadBtn:last-child:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .downloadButtons {
+    flex-direction: column;
+  }
+
+  .downloadBtn {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* Loading and error states */
+.downloadBtn .fa-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
