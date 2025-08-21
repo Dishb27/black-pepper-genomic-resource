@@ -93,6 +93,8 @@ const Blast = () => {
   // Check backend status
   const checkBackendStatus = async () => {
     try {
+      // Test the connection by fetching databases
+      await getDatabases();
       setBackendStatus("online");
     } catch (error) {
       console.error("Backend connection error:", error);
