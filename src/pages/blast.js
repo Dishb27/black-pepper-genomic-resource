@@ -13,30 +13,6 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import { runBlast, getDatabases } from "../../lib/blast-api";
 
-// API configuration utility
-// const getApiBaseUrl = () => {
-//   // For client-side rendering, use window.location
-//   if (typeof window !== "undefined") {
-//     const isLocalhost =
-//       window.location.hostname === "localhost" ||
-//       window.location.hostname === "127.0.0.1";
-
-//     if (isLocalhost) {
-//       return process.env.NEXT_PUBLIC_BLAST_API_LOCAL || "http://localhost:8080";
-//     }
-//     return (
-//       process.env.NEXT_PUBLIC_BLAST_API_PROD ||
-//       `http://${window.location.hostname}:8080`
-//     );
-//   }
-
-//   // For server-side rendering
-//   if (process.env.NODE_ENV === "development") {
-//     return process.env.NEXT_PUBLIC_BLAST_API_LOCAL || "http://localhost:8080";
-//   }
-//   return process.env.NEXT_PUBLIC_BLAST_API_PROD || "http://localhost:8080";
-// };
-
 // Import the API functions from our centralized module
 const Blast = () => {
   const router = useRouter();
@@ -94,7 +70,7 @@ const Blast = () => {
   const checkBackendStatus = async () => {
     try {
       // Test the connection by fetching databases
-      await getDatabases();
+      await getDatabases("/api/databases");
       setBackendStatus("online");
     } catch (error) {
       console.error("Backend connection error:", error);
@@ -105,6 +81,7 @@ const Blast = () => {
       });
     }
   };
+
   // Load available databases
   const loadDatabases = async () => {
     try {
