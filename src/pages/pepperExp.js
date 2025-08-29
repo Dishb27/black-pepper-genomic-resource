@@ -55,7 +55,7 @@ function PepperExpPage() {
   };
 
   const openInNewTab = () => {
-    window.open("https://dish2711.shinyapps.io/ExpressionHeatmap/", "_blank");
+    window.open(" https://dish2711.shinyapps.io/pepperExp/", "_blank");
   };
 
   return (
@@ -122,7 +122,7 @@ function PepperExpPage() {
                   ></i>
                   <p>Unable to load the Expression Heatmap</p>
                   <a
-                    href="https://dish2711.shinyapps.io/ExpressionHeatmap/"
+                    href=" https://dish2711.shinyapps.io/pepperExp/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.externalLink}
@@ -134,7 +134,7 @@ function PepperExpPage() {
 
               <iframe
                 ref={iframeRef}
-                src="https://dish2711.shinyapps.io/ExpressionHeatmap/"
+                src=" https://dish2711.shinyapps.io/pepperExp/"
                 width="100%"
                 height="800px"
                 frameBorder="0"

@@ -13,15 +13,35 @@
 /* Header Styling */
 .header {
   margin-bottom: 2rem;
-  text-align: center;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
 .title {
   font-size: 2.25rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #0f172a;
-  margin-bottom: 1.5rem;
+  margin: 0;
   line-height: 1.2;
+  background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.headerActions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
 /* Program Info Tags */
@@ -29,29 +49,138 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 12px;
   margin-bottom: 1.5rem;
 }
 
 .programTag {
-  background-color: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 8px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease;
+}
+
+.programTag:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .programLabel {
   font-weight: 600;
   color: #64748b;
-  margin-right: 0.5rem;
+  margin-right: 8px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .programValue {
-  font-weight: 600;
+  font-weight: 700;
   color: #0f172a;
+  font-size: 14px;
+}
+
+/* Enhanced Results Summary */
+.resultsSummary {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 1px solid #a7f3d0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.1);
+}
+
+.summaryContent {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 16px;
+}
+
+.summaryIcon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.summaryText {
+  flex: 1;
+}
+
+.summaryText h3 {
+  margin: 0 0 4px 0;
+  color: #065f46;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.summaryText p {
+  margin: 0;
+  color: #047857;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header {
+    padding: 1.5rem;
+  }
+
+  .headerTop {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .title {
+    font-size: 1.875rem;
+    text-align: center;
+  }
+
+  .headerActions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .programInfo {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .programTag {
+    justify-content: space-between;
+  }
+
+  .summaryContent {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .backButton,
+  .exportButton {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+
+  .programTag {
+    padding: 6px 12px;
+  }
+
+  .programLabel,
+  .programValue {
+    font-size: 12px;
+  }
 }
 
 /* Result Cards Grid */
@@ -466,53 +595,43 @@
 }
 
 .backButton,
-.exportButton,
-.newSearchButton {
+.exportButton {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background: white;
-  color: #333;
-  text-decoration: none;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.backButton:hover,
-.exportButton:hover,
-.newSearchButton:hover {
-  background: #f8f9fa;
-  border-color: #ccc;
-}
-
-.retryButton {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border: 1px solid #007bff;
-  border-radius: 6px;
-  background: #007bff;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.retryButton:hover {
-  background: #0056b3;
-}
-
-.resultsSummary {
-  background: #e3f2fd;
-  border: 1px solid #90caf9;
+  padding: 10px 20px;
+  border: 2px solid transparent;
   border-radius: 8px;
-  padding: 16px;
-  margin: 16px 0;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  outline: none;
+}
+
+.backButton {
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  color: white;
+  border-color: #64748b;
+}
+
+.backButton:hover {
+  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(71, 85, 105, 0.3);
+}
+
+.exportButton {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: white;
+  border-color: #059669;
+}
+
+.exportButton:hover {
+  background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
 }
 
 .resultsSummary h3 {

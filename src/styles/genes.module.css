@@ -300,3 +300,92 @@
     max-width: 100%;
   }
 }
+
+/* Add these styles to your genes.module.css file */
+
+.downloadButtonsContainer {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.downloadButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+  justify-content: center;
+}
+
+.downloadButton:hover:not(:disabled) {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.downloadButton:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.downloadButton:first-child {
+  background-color: #10b981;
+}
+
+.downloadButton:first-child:hover:not(:disabled) {
+  background-color: #059669;
+}
+
+.downloadButton:first-child:disabled {
+  background-color: #94a3b8;
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive design for download buttons */
+@media (max-width: 768px) {
+  .downloadButtonsContainer {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .downloadButton {
+    font-size: 11px;
+    padding: 4px 8px;
+    min-width: 60px;
+  }
+}
+
+/* Make table header for download column */
+.dataTable th:last-child {
+  width: 180px;
+  text-align: center;
+}
+
+.dataTable td:last-child {
+  text-align: center;
+  padding: 12px 8px;
+}

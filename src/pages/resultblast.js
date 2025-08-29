@@ -362,7 +362,7 @@ const ResultBlast = () => {
               <div className={styles.programTag}>
                 <span className={styles.programLabel}>Program:</span>
                 <span className={styles.programValue}>
-                  {programInfo.program}
+                  {programInfo.program.toUpperCase()}
                 </span>
               </div>
               <div className={styles.programTag}>
@@ -373,7 +373,7 @@ const ResultBlast = () => {
               </div>
               {executionTime && (
                 <div className={styles.programTag}>
-                  <span className={styles.programLabel}>Execution Time:</span>
+                  <span className={styles.programLabel}>Time:</span>
                   <span className={styles.programValue}>{executionTime}ms</span>
                 </div>
               )}
@@ -381,20 +381,25 @@ const ResultBlast = () => {
                 <div className={styles.programTag}>
                   <span className={styles.programLabel}>Date:</span>
                   <span className={styles.programValue}>
-                    {new Date(timestamp).toLocaleString()}
+                    {new Date(timestamp).toLocaleDateString()}
                   </span>
                 </div>
               )}
             </div>
           )}
 
-          {/* Results summary */}
+          {/* Results summary with better styling */}
           {blastResults && blastResults.length > 0 && (
             <div className={styles.resultsSummary}>
-              <h3>
-                Found {blastResults.length} significant match
-                {blastResults.length !== 1 ? "es" : ""}
-              </h3>
+              <div className={styles.summaryContent}>
+                <div className={styles.summaryText}>
+                  <h3>
+                    {blastResults.length} significant match
+                    {blastResults.length !== 1 ? "es" : ""} found
+                  </h3>
+                  <p>Click on any result to view detailed alignments</p>
+                </div>
+              </div>
             </div>
           )}
         </header>
@@ -570,31 +575,6 @@ const ResultBlast = () => {
                 )}
               </div>
             ))}
-          </div>
-        )}
-
-        {/* Footer with additional actions */}
-        {blastResults && blastResults.length > 0 && (
-          <div className={styles.resultsFooter}>
-            <div className={styles.footerActions}>
-              <button
-                onClick={() => router.push("/blast")}
-                className={styles.newSearchButton}
-              >
-                <ArrowLeft size={16} />
-                Run New Search
-              </button>
-              <button onClick={exportResults} className={styles.exportButton}>
-                <Download size={16} />
-                Export All Results
-              </button>
-            </div>
-            <div className={styles.footerInfo}>
-              <p>
-                Results generated using {program} against {database}
-                {queryId && ` (Query ID: ${queryId})`}
-              </p>
-            </div>
           </div>
         )}
       </div>

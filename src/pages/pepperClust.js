@@ -42,7 +42,7 @@ const PepperClustPage = () => {
   };
 
   const openInNewTab = () => {
-    window.open("https://dish2711.shinyapps.io/BlackPepperClust/", "_blank");
+    window.open("https://dish2711.shinyapps.io/pepperClust/", "_blank");
   };
 
   return (
@@ -92,7 +92,7 @@ const PepperClustPage = () => {
               )}
               <iframe
                 ref={iframeRef}
-                src="https://dish2711.shinyapps.io/BlackPepperClust/"
+                src="https://dish2711.shinyapps.io/pepperClust/"
                 width="100%"
                 height="800px"
                 frameBorder="0"

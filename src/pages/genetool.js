@@ -346,17 +346,17 @@ const GeneToolPage = () => {
               <div className={styles.tableHeaderLeft}>
                 <h2 className={styles.tableTitle}>Detailed Gene Information</h2>
                 <p className={styles.tableDescription}>
-                  Complete gene data including chromosomal locations, exact
-                  positions, and sequences.
+                  Access complete gene data, including chromosomal locations,
+                  genomic ranges and corresponding CDS and protein sequences.
                 </p>
               </div>
 
               {/* Download Section moved into table container */}
               <div className={styles.downloadSection}>
-                <h3 className={styles.downloadTitle}>Download Complete Data</h3>
+                <h3 className={styles.downloadTitle}>Download Data</h3>
                 <p className={styles.downloadDescription}>
-                  Get the complete gene information including full sequences for
-                  detailed analysis.
+                  Retrieve the complete gene information, including full
+                  sequences, for detailed analysis.
                 </p>
                 <div className={styles.downloadButtons}>
                   <button
@@ -383,12 +383,12 @@ const GeneToolPage = () => {
                   <tr>
                     <th>Gene ID</th>
                     <th>Chromosome</th>
-                    <th>Gene Range</th>
-                    <th>Exons</th>
-                    <th>Exon Ranges</th>
-                    <th>Introns</th>
-                    <th>Intron Ranges</th>
-                    <th>CDS Sequence</th>
+                    <th>Genomic Range</th>
+                    <th>Exons Counts</th>
+                    <th>Exon Coordinates</th>
+                    <th>Intron Counts</th>
+                    <th>Intron Coordinates</th>
+                    <th>Coding Sequence</th>
                     <th>Protein Sequence</th>
                   </tr>
                 </thead>
