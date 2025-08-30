@@ -66,6 +66,15 @@ const Blast = () => {
     }
   }, [formData.program, formData.database]);
 
+  // Helper function to count sequences in FASTA content
+  const countSequencesInFasta = (content) => {
+    if (!content || typeof content !== "string") return 0;
+
+    // Count lines that start with ">" (FASTA headers)
+    const sequenceCount = (content.match(/^>/gm) || []).length;
+    return sequenceCount;
+  };
+
   // Check backend status
   const checkBackendStatus = async () => {
     try {
@@ -132,7 +141,7 @@ const Blast = () => {
     const fileExt = selectedFile.name
       .substring(selectedFile.name.lastIndexOf("."))
       .toLowerCase();
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = 10.1 * 1024 * 1024; // 10MB
 
     if (!validExtensions.includes(fileExt)) {
       setFileError("Invalid file type. Please upload a FASTA file.");
@@ -148,6 +157,24 @@ const Blast = () => {
 
     try {
       const textContent = await readFileContent(selectedFile);
+
+      // Check sequence count
+      const sequenceCount = countSequencesInFasta(textContent);
+
+      if (sequenceCount === 0) {
+        setFileError("No valid FASTA sequences found in the file.");
+        resetFileState();
+        return;
+      }
+
+      if (sequenceCount > 5) {
+        setFileError(
+          `File contains ${sequenceCount} sequences. Maximum 5 sequences allowed.`
+        );
+        resetFileState();
+        return;
+      }
+
       const detected = determineSequenceType(textContent);
       setSequenceType(detected);
 
@@ -260,10 +287,14 @@ const Blast = () => {
       newErrors.sequence = "Please enter a sequence or upload a file";
     }
 
+    // Check sequence count for manual input
     if (formData.sequence) {
-      const sequenceCount = (formData.sequence.match(/^>/gm) || []).length;
+      const sequenceCount = countSequencesInFasta(formData.sequence);
       if (sequenceCount > 5) {
         newErrors.sequence = "Maximum 5 sequences allowed";
+      }
+      if (sequenceCount === 0) {
+        newErrors.sequence = "No valid FASTA sequences found";
       }
     }
 

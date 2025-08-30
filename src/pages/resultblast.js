@@ -269,25 +269,6 @@ const ResultBlast = () => {
               </div>
             )}
 
-            {/* No results found message */}
-            {errorMessage.includes("No significant matches") && (
-              <div className={styles.searchTips}>
-                <h4>Search Tips:</h4>
-                <ul>
-                  <li>Check your sequence for errors</li>
-                  <li>
-                    Try using a less stringent E-value (e.g., 1e-1 instead of
-                    1e-5)
-                  </li>
-                  <li>
-                    Ensure you&apos;re using the correct program (blastn vs
-                    blastp)
-                  </li>
-                  <li>Verify that your sequence is from the right organism</li>
-                </ul>
-              </div>
-            )}
-
             <div className={styles.actionButtons}>
               <button
                 onClick={() => router.push("/blast")}

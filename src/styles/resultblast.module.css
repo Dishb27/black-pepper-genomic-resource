@@ -443,7 +443,8 @@
   margin-bottom: 0.375rem;
 }
 
-.goBackButton {
+.goBackButton,
+.retryButton {
   display: inline-block;
   background-color: #097568;
   color: white;
@@ -458,11 +459,13 @@
   margin-top: 1rem;
 }
 
-.goBackButton:hover {
+.goBackButton,
+.retryButton:hover {
   background-color: #166559;
 }
 
-.goBackButton:active {
+.goBackButton,
+.retryButton:active {
   background-color: #0c6163;
 }
 
