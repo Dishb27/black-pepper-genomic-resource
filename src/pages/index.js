@@ -127,7 +127,7 @@ export default function Home() {
 
   const navigationTools = [
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/pp_efp_wft5ap.svg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/pp_efp_wft5ap.svg",
       alt: "eFP Browser",
       label: "eFP Browser",
       description:
@@ -137,7 +137,7 @@ export default function Home() {
       color: "#2ecc71",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/blast_e1jhh1.svg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/blast_e1jhh1.svg",
       alt: "BLAST",
       label: "BLAST",
       description:
@@ -147,7 +147,7 @@ export default function Home() {
       color: "#3498db",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/jbrowse_i4foyb.svg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/jbrowse_i4foyb.svg",
       alt: "JBrowse2",
       label: "JBrowse2",
       description:
@@ -157,7 +157,7 @@ export default function Home() {
       color: "#9b59b6",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/ppExp_czqcch.svg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/ppExp_czqcch.svg",
       alt: "Expression Heatmap",
       label: "PepperExp",
       description: "Visualize gene expression data using interactive heatmaps.",
@@ -166,7 +166,7 @@ export default function Home() {
       color: "#e74c3c",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/snp_final_zl0zja.svg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/snp_final_zl0zja.svg",
       alt: "SNP Marker Search",
       label: "SNP Marker Search",
       description: "Search for markers using chromosome and position range.",
@@ -175,7 +175,7 @@ export default function Home() {
       color: "#f39c12",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/geneviz1_tl6g0r.svg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/geneviz1_tl6g0r.svg",
       alt: "GeneViz",
       label: "GeneViz",
       description:
@@ -185,7 +185,7 @@ export default function Home() {
       color: "#f39c12",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/goPep_cok5xv.svg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/goPep_cok5xv.svg",
       alt: "GO-Pep",
       label: "GO-Pep",
       description:
@@ -195,7 +195,7 @@ export default function Home() {
       color: "#f39c12",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/pepClust_xhksvc.svg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/pepClust_xhksvc.svg",
       alt: "PepperClust",
       label: "PepperClust",
       description:
@@ -278,13 +278,13 @@ export default function Home() {
         <link
           rel="preload"
           as="image"
-          href="https://res.cloudinary.com/dsjtalfn9/image/upload/q_auto,f_auto,w_800/fruit3_ngcrh2.jpg"
+          href="https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/fruit3_ngcrh2.jpg"
           media="(max-width: 768px)"
         />
         <link
           rel="preload"
           as="image"
-          href="https://res.cloudinary.com/dsjtalfn9/image/upload/fruit3_ngcrh2.jpg"
+          href="https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/fruit3_ngcrh2.jpg"
           media="(min-width: 769px)"
         />
       </Head>
@@ -296,21 +296,20 @@ export default function Home() {
         <picture>
           <source
             media="(max-width: 480px)"
-            srcSet="https://res.cloudinary.com/dsjtalfn9/image/upload/q_auto,f_auto,w_500,h_600,c_fill/fruit3_ngcrh2.jpg"
+            srcSet="https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/fruit3_ngcrh2.jpg"
           />
           <source
             media="(max-width: 768px)"
-            srcSet="https://res.cloudinary.com/dsjtalfn9/image/upload/q_auto,f_auto,w_800,h_700,c_fill/fruit3_ngcrh2.jpg"
+            srcSet="https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/fruit3_ngcrh2.jpg"
           />
           <img
-            src="https://res.cloudinary.com/dsjtalfn9/image/upload/q_auto,f_auto,w_800/fruit3_ngcrh2.jpg"
+            src="https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/fruit3_ngcrh2.jpg"
             alt="Black Pepper Background"
             className="banner-mobile-fallback"
             loading="eager"
             fetchPriority="high"
             decoding="async"
             onError={(e) => {
-              // Fallback if Cloudinary image fails
               e.target.style.display = "none";
               e.target.parentElement.style.backgroundColor = "#1b837b";
             }}

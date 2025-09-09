@@ -29,26 +29,26 @@ const GalleryPage = () => {
 
   const featuredImages = [
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/front2_ogakzq.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/front2_ogakzq.jpg",
       featured: true,
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/front1_bzy4ae.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/front1_bzy4ae.jpg",
       featured: true,
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/front3_opisx1.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/front3_opisx1.jpg",
       featured: true,
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/front4_zxpchx.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/front4_zxpchx.jpg",
       featured: true,
     },
   ];
 
   const galleryImages = [
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/dingirala_hfz23s.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/dingirala_hfz23s.jpg",
       title: "DingiRala Variety",
       size: "large",
       details: {
@@ -65,7 +65,7 @@ const GalleryPage = () => {
       },
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/bootaawe_jlujoi.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/bootaawe_jlujoi.jpg",
       title: "BootaweRala Variety",
       size: "medium",
       details: {
@@ -82,7 +82,7 @@ const GalleryPage = () => {
       },
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/kohu_zztlvn.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/kohu_zztlvn.jpg",
       title: "KohukumbureRala Variety",
       size: "large",
       details: {
@@ -99,39 +99,39 @@ const GalleryPage = () => {
       },
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/fruit1_amc5gq.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/fruit1_amc5gq.jpg",
       size: "medium",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/fruit2_h8cflc.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/fruit2_h8cflc.jpg",
       size: "medium",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/leaf_oxbxw4.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/leaf_oxbxw4.jpg",
       size: "medium",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/flower_hhqcoo.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/flower_hhqcoo.jpg",
       size: "medium",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/fruit4_iar60w.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/fruit4_iar60w.jpg",
       size: "medium",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/flower2_m1hv97.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/flower2_m1hv97.jpg",
       size: "medium",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/fruit5_qzoeuh.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/fruit5_qzoeuh.jpg",
       size: "medium",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/plant_ngb1rc.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/plant_ngb1rc.jpg",
       size: "medium",
     },
     {
-      src: "https://res.cloudinary.com/dsjtalfn9/image/upload/fruit6_veq2hf.jpg",
+      src: "https://piper-nigrum-genomics.s3.eu-north-1.amazonaws.com/images/fruit6_veq2hf.jpg",
       size: "medium",
     },
   ];
