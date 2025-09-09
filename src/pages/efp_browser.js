@@ -10,7 +10,9 @@ function EFPBrowserPage() {
     iframeError: false,
   });
   const [isMobile, setIsMobile] = useState(false);
+  const [loadingError, setLoadingError] = useState(false);
   const iframeRef = useRef(null);
+  const loadingTimeoutRef = useRef(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -20,14 +22,39 @@ function EFPBrowserPage() {
     checkMobile();
     window.addEventListener("resize", checkMobile);
 
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+    // Set a timeout to handle cases where the iframe never loads
+    loadingTimeoutRef.current = setTimeout(() => {
+      if (loadingState.isLoading) {
+        setLoadingError(true);
+        setLoadingState((prev) => ({
+          ...prev,
+          isLoading: false,
+        }));
+      }
+    }, 30000); // 30 seconds timeout
+
+    return () => {
+      window.removeEventListener("resize", checkMobile);
+      if (loadingTimeoutRef.current) {
+        clearTimeout(loadingTimeoutRef.current);
+      }
+    };
+  }, [loadingState.isLoading]);
 
   const handleIframeLoad = () => {
-    setLoadingState((prev) => ({
-      ...prev,
-      isLoading: false,
-    }));
+    // Clear the timeout since iframe loaded successfully
+    if (loadingTimeoutRef.current) {
+      clearTimeout(loadingTimeoutRef.current);
+    }
+
+    // Add a small delay to ensure the Shiny app is fully rendered
+    setTimeout(() => {
+      setLoadingState((prev) => ({
+        ...prev,
+        isLoading: false,
+      }));
+      setLoadingError(false);
+    }, 2000); // 2 second delay to ensure Shiny app content is visible
 
     // Try to communicate with the iframe about viewport size
     if (iframeRef.current) {
@@ -48,10 +75,42 @@ function EFPBrowserPage() {
   };
 
   const handleIframeError = () => {
+    if (loadingTimeoutRef.current) {
+      clearTimeout(loadingTimeoutRef.current);
+    }
     setLoadingState({
       isLoading: false,
       iframeError: true,
     });
+    setLoadingError(true);
+  };
+
+  const retryLoading = () => {
+    setLoadingState({
+      isLoading: true,
+      iframeError: false,
+    });
+    setLoadingError(false);
+
+    // Reload the iframe by changing its src
+    if (iframeRef.current) {
+      const currentSrc = iframeRef.current.src;
+      iframeRef.current.src = "";
+      setTimeout(() => {
+        iframeRef.current.src = currentSrc;
+      }, 100);
+    }
+
+    // Reset timeout
+    loadingTimeoutRef.current = setTimeout(() => {
+      if (loadingState.isLoading) {
+        setLoadingError(true);
+        setLoadingState((prev) => ({
+          ...prev,
+          isLoading: false,
+        }));
+      }
+    }, 30000);
   };
 
   const openInNewTab = () => {
@@ -83,6 +142,18 @@ function EFPBrowserPage() {
               <p className={styles.appDescription}>
                 Visualize tissue-specific gene expression patterns
               </p>
+
+              {/* New Tab Button under description */}
+              <div className={styles.quickAccessContainer}>
+                <button className={styles.newTabBtn} onClick={openInNewTab}>
+                  <i className="fas fa-external-link-alt"></i>
+                  Open in New Tab
+                </button>
+                <p className={styles.quickAccessText}>
+                  If the app takes too long to respond or doesn&apos;t load
+                  properly
+                </p>
+              </div>
             </div>
           </div>
 
@@ -105,28 +176,68 @@ function EFPBrowserPage() {
         <section className={styles.contentContainer}>
           <div className={styles.card}>
             <div className={styles.iframeContainer}>
+              {/* Enhanced Loading Overlay */}
               {loadingState.isLoading && (
                 <div className={styles.loadingOverlay}>
-                  <div className={styles.spinner}></div>
-                  <p>Loading eFP Browser...</p>
+                  <div className={styles.loadingContent}>
+                    <div className={styles.spinner}></div>
+                    <h3 className={styles.loadingTitle}>
+                      Loading Pepper-eFP...
+                    </h3>
+                    <p className={styles.loadingText}>
+                      Please wait while we initialize the tissue-specific
+                      expression browser
+                    </p>
+                    <div className={styles.loadingSteps}>
+                      <div className={styles.loadingStep}>
+                        <i className="fas fa-server"></i>
+                        <span>Connecting to server</span>
+                      </div>
+                      <div className={styles.loadingStep}>
+                        <i className="fas fa-seedling"></i>
+                        <span>Loading tissue data</span>
+                      </div>
+                      <div className={styles.loadingStep}>
+                        <i className="fas fa-chart-pie"></i>
+                        <span>Preparing eFP visualization</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               )}
 
-              {loadingState.iframeError && (
+              {/* Enhanced Error Overlay */}
+              {(loadingError || loadingState.iframeError) && (
                 <div className={styles.errorOverlay}>
-                  <i
-                    className="fas fa-exclamation-triangle"
-                    aria-hidden="true"
-                  ></i>
-                  <p>Unable to load the eFP Browser</p>
-                  <a
-                    href="https://dish2711.shinyapps.io/pepper-eFP/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.externalLink}
-                  >
-                    Open in New Tab
-                  </a>
+                  <div className={styles.errorContent}>
+                    <i
+                      className={
+                        styles.errorIcon + " fas fa-exclamation-triangle"
+                      }
+                    ></i>
+                    <h3 className={styles.errorTitle}>Loading Failed</h3>
+                    <p className={styles.errorText}>
+                      The eFP Browser application is taking longer than expected
+                      to load. This might be due to server maintenance or
+                      network issues.
+                    </p>
+                    <div className={styles.errorActions}>
+                      <button
+                        className={styles.retryBtn}
+                        onClick={retryLoading}
+                      >
+                        <i className="fas fa-redo"></i>
+                        Retry Loading
+                      </button>
+                      <button
+                        className={styles.newTabBtn}
+                        onClick={openInNewTab}
+                      >
+                        <i className="fas fa-external-link-alt"></i>
+                        Open in New Tab
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -143,6 +254,8 @@ function EFPBrowserPage() {
                 onError={handleIframeError}
                 style={{
                   minHeight: isMobile ? "600px" : "800px",
+                  opacity: loadingState.isLoading ? 0 : 1,
+                  transition: "opacity 0.3s ease-in-out",
                 }}
                 // Enable scrolling on mobile
                 scrolling={isMobile ? "yes" : "auto"}

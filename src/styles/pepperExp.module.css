@@ -60,6 +60,215 @@
   font-size: 2.5rem;
 }
 
+/* Quick Access Container - New Tab Button under description */
+.quickAccessContainer {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.newTabBtn {
+  background: linear-gradient(135deg, #065551 0%, #0a6b66 100%);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(6, 85, 81, 0.2);
+  margin-bottom: 8px;
+  margin: 0 5px;
+}
+
+.newTabBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(6, 85, 81, 0.3);
+  background: linear-gradient(135deg, #0a6b66 0%, #065551 100%);
+}
+
+.newTabBtn i {
+  margin-right: 8px;
+}
+
+.quickAccessText {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Loading Overlay Styles */
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  border-radius: 10px;
+}
+
+.loadingContent {
+  text-align: center;
+  padding: 40px;
+  max-width: 400px;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid #e3f2fd;
+  border-top: 4px solid #065551;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 30px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingTitle {
+  color: #065551;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.loadingText {
+  color: #6c757d;
+  font-size: 1rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.loadingSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  max-width: 250px;
+  margin: 0 auto;
+}
+
+.loadingStep {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #495057;
+  font-size: 0.9rem;
+  animation: fadeInOut 2s ease-in-out infinite;
+}
+
+.loadingStep:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.loadingStep:nth-child(3) {
+  animation-delay: 1s;
+}
+
+.loadingStep i {
+  color: #065551;
+  width: 16px;
+  text-align: center;
+}
+
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Error Overlay Styles - Updated */
+.errorOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.errorContent {
+  text-align: center;
+  padding: 40px;
+  max-width: 450px;
+}
+
+.errorIcon {
+  font-size: 3rem;
+  color: #dc3545;
+  margin-bottom: 20px;
+}
+
+.errorTitle {
+  color: #dc3545;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.errorText {
+  color: #6c757d;
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.errorActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.retryBtn {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+}
+
+.retryBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+}
+
+.retryBtn i {
+  margin-right: 6px;
+}
+
 /* Mobile Notice Styles */
 .mobileNotice {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -198,56 +407,6 @@
   color: #0a6b66;
 }
 
-/* Loading and Error Overlay Styles */
-.loadingOverlay,
-.errorOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  text-align: center;
-  background-color: rgba(255, 255, 255, 0.9);
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid #1f8077;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-.loadingText {
-  margin-top: 15px;
-  color: #2c3e50;
-  font-size: 1rem;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.errorOverlay {
-  color: #e74c3c;
-}
-
-.errorOverlay i {
-  font-size: 3rem;
-  margin-bottom: 15px;
-}
-
 .externalLink {
   display: inline-block;
   margin-top: 15px;
@@ -342,6 +501,19 @@
     margin-top: 20px;
   }
 
+  .quickAccessContainer {
+    margin-top: 15px;
+  }
+
+  .newTabBtn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .quickAccessText {
+    font-size: 0.8rem;
+  }
+
   .iframeContainer {
     padding-bottom: 100%; /* More square aspect ratio for mobile */
     min-height: 600px; /* Ensure minimum height */
@@ -368,6 +540,50 @@
     padding: 10px 20px;
     font-size: 0.85rem;
   }
+
+  /* Loading overlay mobile adjustments */
+  .loadingContent {
+    padding: 30px 20px;
+  }
+
+  .loadingTitle {
+    font-size: 1.3rem;
+  }
+
+  .loadingText {
+    font-size: 0.9rem;
+  }
+
+  .loadingSteps {
+    max-width: 200px;
+  }
+
+  .loadingStep {
+    font-size: 0.85rem;
+  }
+
+  .errorContent {
+    padding: 30px 20px;
+  }
+
+  .errorTitle {
+    font-size: 1.2rem;
+  }
+
+  .errorText {
+    font-size: 0.9rem;
+  }
+
+  .errorActions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .retryBtn,
+  .newTabBtn {
+    width: 100%;
+    max-width: 200px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -384,6 +600,15 @@
 
   .appDescription {
     font-size: 0.9rem;
+  }
+
+  .newTabBtn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+
+  .quickAccessText {
+    font-size: 0.75rem;
   }
 
   .iframeContainer {
@@ -410,6 +635,51 @@
 
   .backLink {
     font-size: 0.9rem;
+  }
+
+  /* Loading overlay small screen adjustments */
+  .loadingContent {
+    padding: 20px 15px;
+  }
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 20px;
+  }
+
+  .loadingTitle {
+    font-size: 1.1rem;
+  }
+
+  .loadingText {
+    font-size: 0.85rem;
+  }
+
+  .loadingSteps {
+    max-width: 180px;
+    gap: 10px;
+  }
+
+  .loadingStep {
+    font-size: 0.8rem;
+  }
+
+  .errorContent {
+    padding: 20px 15px;
+  }
+
+  .errorIcon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+  }
+
+  .errorTitle {
+    font-size: 1.1rem;
+  }
+
+  .errorText {
+    font-size: 0.85rem;
   }
 }
 

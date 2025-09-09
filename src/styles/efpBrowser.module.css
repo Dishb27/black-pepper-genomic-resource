@@ -5,6 +5,31 @@
   margin-top: 60px;
   background-color: #ffffff;
   padding: 20px;
+  max-width: 1500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Hero Section Styles */
+.heroSection {
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: 0px;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.heroContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.heroTextContainer {
+  flex: 1;
+  max-width: 600px;
+  text-align: center;
 }
 
 .iframeWrapper {
@@ -44,34 +69,104 @@
   font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 }
 
-.responsiveIframe {
-  width: 100%;
-  height: 100vh;
-  border: none;
+/* Quick Access Container - New Tab Button under description */
+.quickAccessContainer {
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
-.loadingOverlay {
+.newTabBtn {
+  background: linear-gradient(135deg, #065551 0%, #0a6b66 100%);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(6, 85, 81, 0.2);
+  margin-bottom: 8px;
+  margin: 0 5px;
+}
+
+.newTabBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(6, 85, 81, 0.3);
+  background: linear-gradient(135deg, #0a6b66 0%, #065551 100%);
+}
+
+.newTabBtn i {
+  margin-right: 8px;
+}
+
+.quickAccessText {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Content Container Styles */
+.contentContainer {
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background: white;
+  margin-bottom: 30px;
+}
+
+.card {
+  width: 100%;
+}
+
+.iframeContainer {
+  position: relative;
+  width: 100%;
+  padding-bottom: 75%; /* 4:3 aspect ratio */
+  height: 0;
+  overflow: hidden;
+}
+
+.responsiveIframe {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  border: none;
+}
+
+/* Enhanced Loading Overlay Styles */
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.8);
   z-index: 10;
+  border-radius: 15px;
+}
+
+.loadingContent {
+  text-align: center;
+  padding: 40px;
+  max-width: 400px;
 }
 
 .spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #1a6869;
+  width: 60px;
+  height: 60px;
+  border: 4px solid #e3f2fd;
+  border-top: 4px solid #065551;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
   animation: spin 1s linear infinite;
-  margin-bottom: 15px;
+  margin: 0 auto 30px;
 }
 
 @keyframes spin {
@@ -83,18 +178,149 @@
   }
 }
 
+.loadingTitle {
+  color: #065551;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.loadingText {
+  color: #6c757d;
+  font-size: 1rem;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.loadingSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  max-width: 250px;
+  margin: 0 auto;
+}
+
+.loadingStep {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #495057;
+  font-size: 0.9rem;
+  animation: fadeInOut 2s ease-in-out infinite;
+}
+
+.loadingStep:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.loadingStep:nth-child(3) {
+  animation-delay: 1s;
+}
+
+.loadingStep i {
+  color: #065551;
+  width: 16px;
+  text-align: center;
+}
+
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Enhanced Error Overlay Styles */
+.errorOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.errorContent {
+  text-align: center;
+  padding: 40px;
+  max-width: 450px;
+}
+
+.errorIcon {
+  font-size: 3rem;
+  color: #dc3545;
+  margin-bottom: 20px;
+}
+
+.errorTitle {
+  color: #dc3545;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.errorText {
+  color: #6c757d;
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.errorActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.retryBtn {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+}
+
+.retryBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+}
+
+.retryBtn i {
+  margin-right: 6px;
+}
+
 /* Mobile Notice Styles */
 .mobileNotice {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   border: 1px solid #dee2e6;
   border-radius: 12px;
   padding: 20px;
-  /*margin: 10px auto;*/
   margin-top: 10px;
   margin-bottom: 10px;
   max-width: 500px;
   text-align: center;
-  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .noticeText {
@@ -162,9 +388,88 @@
   color: #0a6b66;
 }
 
+/* Legacy external link style for compatibility */
+.externalLink {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #1d867e;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.externalLink:hover {
+  background-color: #1c9484;
+}
+
+/* Responsive Design */
+@media (max-width: 1600px) {
+  .appContainer {
+    max-width: 95%;
+    padding: 15px;
+  }
+
+  .heroSection {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .appTitle {
+    font-size: 2.2rem;
+  }
+
+  .appDescription {
+    font-size: 1.1rem;
+  }
+
+  .heroContent {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
 @media (max-width: 768px) {
+  .appContainer {
+    padding: 10px;
+  }
+
+  .heroSection {
+    padding: 15px;
+    margin-top: 20px;
+  }
+
+  .appTitle {
+    font-size: 2rem;
+  }
+
+  .appDescription {
+    font-size: 1rem;
+  }
+
+  .heroContent {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .quickAccessContainer {
+    margin-top: 15px;
+  }
+
+  .newTabBtn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+
+  .quickAccessText {
+    font-size: 0.8rem;
+  }
+
   .iframeContainer {
-    min-height: 600px;
+    padding-bottom: 100%; /* More square aspect ratio for mobile */
+    min-height: 600px; /* Ensure minimum height */
   }
 
   /* Make iframe container more mobile-friendly */
@@ -188,9 +493,77 @@
     padding: 10px 20px;
     font-size: 0.85rem;
   }
+
+  /* Loading overlay mobile adjustments */
+  .loadingContent {
+    padding: 30px 20px;
+  }
+
+  .loadingTitle {
+    font-size: 1.3rem;
+  }
+
+  .loadingText {
+    font-size: 0.9rem;
+  }
+
+  .loadingSteps {
+    max-width: 200px;
+  }
+
+  .loadingStep {
+    font-size: 0.85rem;
+  }
+
+  .errorContent {
+    padding: 30px 20px;
+  }
+
+  .errorTitle {
+    font-size: 1.2rem;
+  }
+
+  .errorText {
+    font-size: 0.9rem;
+  }
+
+  .errorActions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .retryBtn,
+  .newTabBtn {
+    width: 100%;
+    max-width: 200px;
+  }
 }
 
 @media (max-width: 480px) {
+  .appTitle {
+    font-size: 1.8rem;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .appDescription {
+    font-size: 0.9rem;
+  }
+
+  .newTabBtn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+
+  .quickAccessText {
+    font-size: 0.75rem;
+  }
+
+  .iframeContainer {
+    padding-bottom: 120%; /* Even more height for very small screens */
+    min-height: 500px;
+  }
+
   /* Force iframe to take full width and be scrollable */
   .iframeContainer iframe {
     position: static !important;
@@ -206,5 +579,57 @@
   .openExternalBtn {
     padding: 8px 16px;
     font-size: 0.8rem;
+  }
+
+  /* Loading overlay small screen adjustments */
+  .loadingContent {
+    padding: 20px 15px;
+  }
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 20px;
+  }
+
+  .loadingTitle {
+    font-size: 1.1rem;
+  }
+
+  .loadingText {
+    font-size: 0.85rem;
+  }
+
+  .loadingSteps {
+    max-width: 180px;
+    gap: 10px;
+  }
+
+  .loadingStep {
+    font-size: 0.8rem;
+  }
+
+  .errorContent {
+    padding: 20px 15px;
+  }
+
+  .errorIcon {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+  }
+
+  .errorTitle {
+    font-size: 1.1rem;
+  }
+
+  .errorText {
+    font-size: 0.85rem;
+  }
+}
+
+/* For larger screens */
+@media (min-width: 1200px) {
+  .iframeContainer {
+    padding-bottom: 65%;
   }
 }

@@ -422,7 +422,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="map" className="map-section">
+      {/* <section id="map" className="map-section">
         <div className="section-container">
           <h2 className="section-title">Black Pepper Global Production</h2>
           <div className="map-container">
@@ -434,7 +434,7 @@ export default function Home() {
             ></iframe>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section id="quick-navigation" className="tools-section">
         <div className="section-container">
@@ -468,4 +468,3 @@ export default function Home() {
     </>
   );
 }
-// $env:NODE_OPTIONS="--max-old-space-size=8192"; npm run dev
