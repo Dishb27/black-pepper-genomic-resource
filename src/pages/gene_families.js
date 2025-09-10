@@ -168,7 +168,7 @@ const GeneFamilies = () => {
 
         <h3 className={styles.loadingTitle}>Loading Gene Families</h3>
         <p className={styles.loadingSubtitle}>
-          Retrieving TF families data from Piper nigrum database...
+          Fetching TF family data from the database...
         </p>
 
         <div className={styles.progressContainer}>
