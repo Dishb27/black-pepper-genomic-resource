@@ -101,7 +101,7 @@ function PepperExpPage() {
   };
 
   const openInNewTab = () => {
-    window.open("https://dish2711.shinyapps.io/pepperExp/", "_blank");
+    window.open("https://blackpepkb25.shinyapps.io/pepperExp/", "_blank");
   };
 
   const handleDismissBox = () => {
@@ -255,11 +255,11 @@ function PepperExpPage() {
 
               <iframe
                 ref={iframeRef}
-                src="https://dish2711.shinyapps.io/pepperExp/"
+                src="https://blackpepkb25.shinyapps.io/pepperExp/"
                 width="100%"
                 height="800px"
                 frameBorder="0"
-                title="Pepper Expression Heatmap"
+                title="Black Pepper Expression Heatmap"
                 aria-label="Interactive gene expression heatmap"
                 onLoad={handleIframeLoad}
                 onError={handleIframeError}

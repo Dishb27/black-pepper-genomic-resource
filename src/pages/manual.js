@@ -28,7 +28,7 @@ const Manual = () => {
               purpose as a translational genomics resource.
             </li>
             <li>
-              <strong>Introduction:</strong> Overview of PepperKB and its role
+              <strong>Introduction:</strong> Overview of BlackPepKB and its role
               in consolidating <em>Piper nigrum</em> data.
             </li>
             <li>
@@ -908,7 +908,7 @@ const Manual = () => {
           <h2>Contact Form</h2>
           <p>
             The Contact Page provides an intuitive interface for communicating
-            with the Black Pepper Knowledgebase team.
+            with the Black Pepper Knowledge base team.
           </p>
 
           <h3>How to Use:</h3>

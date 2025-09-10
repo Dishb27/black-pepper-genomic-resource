@@ -52,7 +52,7 @@ const SNPMarkerPage = () => {
   return (
     <>
       <Head>
-        <title>SNP Marker Studies - PepperKB</title>
+        <title>SNP Marker Studies - BlackPepKB</title>
         <meta
           name="description"
           content="Explore our comprehensive SNP marker database for Black Pepper genomics research"
@@ -65,7 +65,9 @@ const SNPMarkerPage = () => {
         <main className={styles.snpMarkerContainer}>
           <div className={styles.heroSection}>
             <div className={styles.heroContent}>
-              <span className={styles.tagline}>BLACK PEPPER KNOWLEDGEBASE</span>
+              <span className={styles.tagline}>
+                BLACK PEPPER KNOWLEDGE BASE
+              </span>
               <h1>SNP Marker Database</h1>
               <p>
                 Explore single nucleotide polymorphism (SNP) markers curated

@@ -132,7 +132,7 @@ function EFPBrowserPage() {
   return (
     <>
       <Head>
-        <title>eFP Browser - PepperKB</title>
+        <title>eFP Browser - BlackPepKB</title>
         <meta
           name="description"
           content="Explore tissue-specific gene expression in peppers using the Expression Flower Plot (eFP) Browser"

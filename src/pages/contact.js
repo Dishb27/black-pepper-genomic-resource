@@ -108,7 +108,7 @@ const ContactForm = () => {
 
           <div className={styles.cardContent}>
             <div className={styles.headerSection}>
-              <span className={styles.tagline}>BLACK PEPPER KNOWLEDGEBASE</span>
+              <span className={styles.tagline}>BLACK PEPPER KNOWLEDGE BASE</span>
               <h1>GET IN TOUCH</h1>
               <p>
                 If you have any questions, comments, or inquiries, please feel

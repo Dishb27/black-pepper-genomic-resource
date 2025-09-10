@@ -273,7 +273,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>BlackPepKB - Black Pepper Knowledgebase</title>
+        <title>BlackPepKB - Black Pepper Knowledge base</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link
           rel="preload"
@@ -317,7 +317,7 @@ export default function Home() {
         </picture>
 
         <div className="banner-content">
-          <h1>BLACK PEPPER KNOWLEDGEBASE</h1>
+          <h1>BLACK PEPPER KNOWLEDGE BASE</h1>
           <h1>(BlackPepKB)</h1>
           <p>
             A comprehensive web resource for black pepper translation genomics,
@@ -334,7 +334,7 @@ export default function Home() {
         <div className="intro-container">
           <div className="intro-card">
             <h1 className="intro-title">
-              Welcome to the Black Pepper KnowledgeBase
+              Welcome to the Black Pepper Knowledge Base
             </h1>
             <div className="intro-content">
               <p>

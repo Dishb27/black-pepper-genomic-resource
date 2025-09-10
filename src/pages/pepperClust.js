@@ -75,7 +75,7 @@ const PepperClustPage = () => {
   };
 
   const openInNewTab = () => {
-    window.open("https://dish2711.shinyapps.io/pepperClust/", "_blank");
+    window.open("https://blackpepkb25.shinyapps.io/pepperClust/", "_blank");
   };
 
   const retryLoading = () => {
@@ -114,7 +114,7 @@ const PepperClustPage = () => {
   return (
     <>
       <Head>
-        <title>PepperClust - PepperKB</title>
+        <title>PepperClust - BlackPepKB</title>
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
@@ -241,7 +241,7 @@ const PepperClustPage = () => {
 
               <iframe
                 ref={iframeRef}
-                src="https://dish2711.shinyapps.io/pepperClust/"
+                src="https://blackpepkb25.shinyapps.io/pepperClust/"
                 width="100%"
                 height="800px"
                 frameBorder="0"

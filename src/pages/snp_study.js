@@ -282,7 +282,7 @@ const SNPMarkers = () => {
   return (
     <>
       <Head>
-        <title>{studyName} SNP Markers - PepperKB</title>
+        <title>{studyName} SNP Markers - BlackPepKB</title>
         <meta
           name="description"
           content={`Search SNP markers for ${studyName} study`}

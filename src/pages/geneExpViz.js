@@ -27,7 +27,7 @@ const GeneExpVizPage = () => {
   return (
     <div className={styles.pageWrapper}>
       <Head>
-        <title>Gene Expression Visualization | PepperKB</title>
+        <title>Gene Expression Visualization | BlackPepKB</title>
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
