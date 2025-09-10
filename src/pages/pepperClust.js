@@ -8,12 +8,13 @@ const PepperClustPage = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingError, setLoadingError] = useState(false);
+  const [showDismissableBox, setShowDismissableBox] = useState(true);
   const iframeRef = useRef(null);
   const loadingTimeoutRef = useRef(null);
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= 1024); // Changed to 1024px for better tablet support
     };
 
     checkMobile();
@@ -99,6 +100,17 @@ const PepperClustPage = () => {
     }, 30000);
   };
 
+  const handleDismissBox = () => {
+    // Add closing animation class
+    const box = document.querySelector(`.${styles.dismissableBox}`);
+    if (box) {
+      box.classList.add(styles.closing);
+      setTimeout(() => {
+        setShowDismissableBox(false);
+      }, 300); // Match animation duration
+    }
+  };
+
   return (
     <>
       <Head>
@@ -117,17 +129,6 @@ const PepperClustPage = () => {
             Explore gene clustering using interactive heatmaps and dendrogram
           </p>
 
-          {/* New Tab Button under description */}
-          <div className={styles.quickAccessContainer}>
-            <button className={styles.newTabBtn} onClick={openInNewTab}>
-              <i className="fas fa-external-link-alt"></i>
-              Open in New Tab
-            </button>
-            <p className={styles.quickAccessText}>
-              If the app takes too long to respond or doesn&apos;t load properly
-            </p>
-          </div>
-
           {/* Mobile-specific notice - only show on mobile */}
           {isMobile && (
             <div className={styles.mobileNotice}>
@@ -141,6 +142,37 @@ const PepperClustPage = () => {
         </div>
 
         <div className={styles.contentContainer}>
+          {/* Dismissable Box - positioned above iframe container */}
+          {showDismissableBox && (
+            <div className={styles.dismissableContainer}>
+              <div className={styles.dismissableBox}>
+                <div className={styles.dismissableHeader}>
+                  {/* <h3 className={styles.dismissableTitle}>
+                    App Loading Information
+                  </h3> */}
+                  <button
+                    className={styles.closeButton}
+                    onClick={handleDismissBox}
+                    aria-label="Close notification"
+                  >
+                    <i className="fas fa-times"></i>
+                  </button>
+                </div>
+                <p className={styles.dismissableText}>
+                  This app may take a few seconds to load. Click here if you
+                  prefer to open it in a new tab.
+                </p>
+                <button
+                  className={styles.dismissableButton}
+                  onClick={openInNewTab}
+                >
+                  <i className="fas fa-external-link-alt"></i>
+                  Open in New Tab
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className={styles.card}>
             <div className={styles.iframeContainer}>
               {/* Loading Overlay */}

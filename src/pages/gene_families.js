@@ -8,30 +8,83 @@ import styles from "../styles/gene_families.module.css";
 const GeneFamilies = () => {
   const [families, setFamilies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [loadingMessage, setLoadingMessage] = useState("Initializing...");
   const [error, setError] = useState(null);
   const [activeCategory, setActiveCategory] = useState("all");
   const [downloadingFamily, setDownloadingFamily] = useState(null);
   const [downloadingType, setDownloadingType] = useState(null);
   const router = useRouter();
 
+  // Enhanced loading messages
+  const loadingMessages = [
+    { message: "Connecting to database...", progress: 20 },
+    { message: "Fetching gene family data...", progress: 40 },
+    { message: "Processing family information...", progress: 60 },
+    { message: "Organizing results...", progress: 80 },
+    { message: "Almost ready...", progress: 95 },
+  ];
+
+  // Simulate progressive loading updates
+  useEffect(() => {
+    if (loading) {
+      const interval = setInterval(() => {
+        setLoadingProgress((prev) => {
+          const newProgress = Math.min(prev + 2, 95);
+
+          // Update message based on progress
+          const currentMessage = loadingMessages.find(
+            (msg) =>
+              newProgress >= msg.progress - 20 && newProgress < msg.progress
+          );
+          if (currentMessage) {
+            setLoadingMessage(currentMessage.message);
+          }
+
+          return newProgress;
+        });
+      }, 100);
+
+      return () => clearInterval(interval);
+    }
+  }, [loading]);
+
   // Fetch gene families from the API
   useEffect(() => {
     const fetchGeneFamilies = async () => {
       try {
+        setLoadingMessage("Connecting to server...");
+        setLoadingProgress(10);
+
         const response = await fetch("/api/geneFamilies");
+
+        setLoadingMessage("Receiving data...");
+        setLoadingProgress(50);
+
         if (!response.ok) {
           throw new Error("Failed to fetch gene families");
         }
+
         const data = await response.json();
+
+        setLoadingMessage("Processing gene families...");
+        setLoadingProgress(80);
 
         // Sort families alphabetically by TF_Family
         const sortedFamilies = data.sort((a, b) =>
           a.TF_Family.localeCompare(b.TF_Family)
         );
-        setFamilies(sortedFamilies);
+
+        setLoadingMessage("Finalizing...");
+        setLoadingProgress(100);
+
+        // Small delay to show completion
+        setTimeout(() => {
+          setFamilies(sortedFamilies);
+          setLoading(false);
+        }, 300);
       } catch (error) {
         setError(error.message);
-      } finally {
         setLoading(false);
       }
     };
@@ -44,7 +97,7 @@ const GeneFamilies = () => {
     router.push(`/families/${formattedFamilyName}`);
   };
 
-  // Handle sequence downloads
+  // Handle sequence downloads with better feedback
   const handleDownload = async (familyName, sequenceType) => {
     setDownloadingFamily(familyName);
     setDownloadingType(sequenceType);
@@ -105,6 +158,47 @@ const GeneFamilies = () => {
 
   const categories = Object.keys(groupedFamilies).sort();
 
+  // Enhanced Loading Component
+  const LoadingComponent = () => (
+    <div className={styles.loadingContainer}>
+      <div className={styles.loadingCard}>
+        <div className={styles.loadingIcon}>
+          <i className="fas fa-dna fa-2x"></i>
+        </div>
+
+        <h3 className={styles.loadingTitle}>Loading Gene Families</h3>
+        <p className={styles.loadingSubtitle}>
+          Retrieving TF families data from Piper nigrum database...
+        </p>
+
+        <div className={styles.progressContainer}>
+          <div className={styles.progressBar}>
+            <div
+              className={styles.progressFill}
+              style={{ width: `${loadingProgress}%` }}
+            ></div>
+          </div>
+          <div className={styles.progressText}>
+            {Math.round(loadingProgress)}%
+          </div>
+        </div>
+
+        <p className={styles.loadingMessage}>
+          <i className="fas fa-circle-notch fa-spin"></i>
+          {loadingMessage}
+        </p>
+
+        <div className={styles.loadingDisclaimer}>
+          <i className="fas fa-info-circle"></i>
+          <span>
+            This may take a few moments while we fetch comprehensive genomic
+            data
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className={styles.appContainer}>
       <Head>
@@ -129,22 +223,36 @@ const GeneFamilies = () => {
           </p>
         </div>
 
-        {loading && (
-          <div className={styles.loadingContainer}>
-            <div className={styles.loadingSpinner}></div>
-            <p>Loading gene families...</p>
-          </div>
-        )}
+        {loading && <LoadingComponent />}
 
         {error && (
           <div className={styles.errorMessage}>
             <i className="fas fa-exclamation-circle"></i>
-            <p>Error: {error}</p>
+            <div>
+              <p>
+                <strong>Unable to load gene families</strong>
+              </p>
+              <p>Error: {error}</p>
+              <button
+                className={styles.retryButton}
+                onClick={() => window.location.reload()}
+              >
+                <i className="fas fa-redo"></i>
+                Try Again
+              </button>
+            </div>
           </div>
         )}
 
         {!loading && !error && (
           <div className={styles.familiesContainer}>
+            <div className={styles.familiesHeader}>
+              <div className={styles.familiesStats}>
+                <i className="fas fa-chart-bar"></i>
+                <span>{families.length} gene families loaded</span>
+              </div>
+            </div>
+
             <div className={styles.categoryTabs}>
               <button
                 className={`${styles.categoryTab} ${
@@ -152,7 +260,7 @@ const GeneFamilies = () => {
                 }`}
                 onClick={() => setActiveCategory("all")}
               >
-                All
+                All ({families.length})
               </button>
               {categories.map((category) => (
                 <button
@@ -162,7 +270,7 @@ const GeneFamilies = () => {
                   }`}
                   onClick={() => setActiveCategory(category)}
                 >
-                  {category}
+                  {category} ({groupedFamilies[category].length})
                 </button>
               ))}
             </div>

@@ -9,12 +9,13 @@ function PepperExpPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadingError, setLoadingError] = useState(false);
+  const [showDismissableBox, setShowDismissableBox] = useState(true);
   const iframeRef = useRef(null);
   const loadingTimeoutRef = useRef(null);
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= 1024); // Changed to 1024px for better tablet support
     };
 
     checkMobile();
@@ -103,6 +104,17 @@ function PepperExpPage() {
     window.open("https://dish2711.shinyapps.io/pepperExp/", "_blank");
   };
 
+  const handleDismissBox = () => {
+    // Add closing animation class
+    const box = document.querySelector(`.${styles.dismissableBox}`);
+    if (box) {
+      box.classList.add(styles.closing);
+      setTimeout(() => {
+        setShowDismissableBox(false);
+      }, 300); // Match animation duration
+    }
+  };
+
   return (
     <>
       <Head>
@@ -129,37 +141,51 @@ function PepperExpPage() {
                 Visualize gene expression data through interactive heatmaps
               </p>
 
-              {/* New Tab Button under description */}
-              <div className={styles.quickAccessContainer}>
-                <button className={styles.newTabBtn} onClick={openInNewTab}>
-                  <i className="fas fa-external-link-alt"></i>
-                  Open in New Tab
-                </button>
-                <p className={styles.quickAccessText}>
-                  If the app takes too long to respond or doesn&apos;t load
-                  properly
-                </p>
-              </div>
+              {/* Mobile-specific notice - only show on mobile */}
+              {isMobile && (
+                <div className={styles.mobileNotice}>
+                  <p className={styles.noticeText}>
+                    <i className="fas fa-mobile-alt"></i>
+                    For better mobile experience, we recommend opening the app
+                    in a new tab
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Mobile warning and external link */}
-          {isMobile && (
-            <div className={styles.mobileNotice}>
-              <p className={styles.noticeText}>
-                <i className="fas fa-mobile-alt"></i>
-                For the best mobile experience, we recommend opening the app in
-                a new tab
-              </p>
-              <button className={styles.openExternalBtn} onClick={openInNewTab}>
-                <i className="fas fa-external-link-alt"></i>
-                Open in New Tab
-              </button>
-            </div>
-          )}
+          {/* Mobile warning and external link - REMOVED */}
         </section>
 
         <section className={styles.contentContainer}>
+          {/* Dismissable Box - positioned above iframe container */}
+          {showDismissableBox && (
+            <div className={styles.dismissableContainer}>
+              <div className={styles.dismissableBox}>
+                <div className={styles.dismissableHeader}>
+                  <button
+                    className={styles.closeButton}
+                    onClick={handleDismissBox}
+                    aria-label="Close notification"
+                  >
+                    <i className="fas fa-times"></i>
+                  </button>
+                </div>
+                <p className={styles.dismissableText}>
+                  This app may take a few seconds to load. Click here if you
+                  prefer to open it in a new tab.
+                </p>
+                <button
+                  className={styles.dismissableButton}
+                  onClick={openInNewTab}
+                >
+                  <i className="fas fa-external-link-alt"></i>
+                  Open in New Tab
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className={styles.card}>
             <div className={styles.iframeContainer}>
               {/* Loading Overlay */}
@@ -250,16 +276,14 @@ function PepperExpPage() {
             </div>
 
             {/* Alternative mobile view */}
-            {isMobile && (
-              <div className={styles.mobileAlternative}>
-                <p className={styles.alternativeText}>
-                  Having trouble with the embedded app?
-                  <button className={styles.linkButton} onClick={openInNewTab}>
-                    Click here to open it directly
-                  </button>
-                </p>
-              </div>
-            )}
+            <div className={styles.mobileAlternative}>
+              <p className={styles.alternativeText}>
+                Having trouble with the embedded app?
+                <button className={styles.linkButton} onClick={openInNewTab}>
+                  Click here to open it directly
+                </button>
+              </p>
+            </div>
           </div>
         </section>
       </main>
