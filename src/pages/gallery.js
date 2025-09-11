@@ -179,7 +179,7 @@ const GalleryPage = () => {
   return (
     <>
       <Head>
-        <title>Gallery - Black Pepper Knowledge base</title>
+        <title>Gallery - Black Pepper Knowledge Base</title>
         {/* <meta
           name="description"
           content="Explore our comprehensive gallery of black pepper varieties and research specimens."

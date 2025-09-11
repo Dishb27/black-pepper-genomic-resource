@@ -312,7 +312,7 @@ const SNPMarkers = () => {
         <div className={styles.loadingDisclaimer}>
           <i className="fas fa-info-circle"></i>
           <span>
-            This may take a few moments while we fetch comprehensive SNP marker
+            This may take a few seconds as we fetch comprehensive SNP marker
             data
           </span>
         </div>

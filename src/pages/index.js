@@ -273,7 +273,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>BlackPepKB - Black Pepper Knowledge base</title>
+        <title>BlackPepKB - Black Pepper Knowledge Base</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link
           rel="preload"

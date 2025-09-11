@@ -191,8 +191,7 @@ const GeneFamilies = () => {
         <div className={styles.loadingDisclaimer}>
           <i className="fas fa-info-circle"></i>
           <span>
-            This may take a few moments while we fetch comprehensive genomic
-            data
+            This may take a few seconds as we fetch comprehensive genomic data
           </span>
         </div>
       </div>
@@ -202,7 +201,7 @@ const GeneFamilies = () => {
   return (
     <div className={styles.appContainer}>
       <Head>
-        <title>Gene Families - Black Pepper Knowledgebase</title>
+        <title>Gene Families - Black Pepper Knowledge Base</title>
         <meta
           name="description"
           content="Explore gene families of black pepper"

@@ -77,7 +77,7 @@ const Manual = () => {
             </li>
           </ul>
           <img
-            src="https://res.cloudinary.com/dsjtalfn9/image/upload/homepage_qlu2jc.png"
+            src="https://res.cloudinary.com/dsjtalfn9/image/upload/HM_new_e4bqim.png"
             alt="Top Navigation Bar"
             className={styles.image}
           />
@@ -88,7 +88,7 @@ const Manual = () => {
             resources.
           </p>
           <img
-            src="https://res.cloudinary.com/dsjtalfn9/image/upload/footer_pfk2yj.png"
+            src="https://res.cloudinary.com/dsjtalfn9/image/upload/foote_new_vuzkfb.png"
             alt="Quick Links"
             className={styles.image}
           />
@@ -542,7 +542,7 @@ const Manual = () => {
             </li>
           </ol>
           <img
-            src="https://res.cloudinary.com/dsjtalfn9/image/upload/genefamily_dothhl.png"
+            src="https://res.cloudinary.com/dsjtalfn9/image/upload/TF_new_sn5exv.png"
             alt="TF Family Interface"
             className={styles.image}
           />
@@ -797,110 +797,92 @@ const Manual = () => {
             </li> */}
           </ol>
           <img
-            src="https://res.cloudinary.com/dsjtalfn9/image/upload/gallery3_nhxovn.png"
+            src="https://res.cloudinary.com/dsjtalfn9/image/upload/gallery_h8g6fk.png"
             alt="Gallery Interface"
             className={styles.image}
           />
         </div>
       ),
     },
-    // {
-    //   name: "BLAST",
-    //   content: (
-    //     <div>
-    //       <h2>BLAST: Basic Local Alignment Search Tool</h2>
-    //       <p>
-    //         The BLAST tool allows researchers to compare nucleotide or protein
-    //         sequences to the black pepper sequence database, identifying regions
-    //         of similarity between sequences.
-    //       </p>
+    {
+      name: "BLAST",
+      content: (
+        <div>
+          <h2>BLAST: Basic Local Alignment Search Tool</h2>
+          <p>
+            The BLAST tool allows researchers to compare nucleotide or protein
+            sequences to the black pepper sequence database, identifying regions
+            of similarity between sequences.
+          </p>
 
-    //       <h3>How to Use:</h3>
-    //       <ol className={styles.manual}>
-    //         <li>
-    //           <strong>Select BLAST Program:</strong>
-    //           <ul>
-    //             <li>
-    //               Choose from available BLAST programs:
-    //               <ul>
-    //                 <li>
-    //                   blastn - Search nucleotide database using nucleotide query
-    //                 </li>
-    //                 <li>
-    //                   blastp - Search protein database using protein query
-    //                 </li>
-    //                 <li>
-    //                   blastx - Search protein database using translated
-    //                   nucleotide query
-    //                 </li>
-    //                 <li>
-    //                   tblastn - Search translated nucleotide database using
-    //                   protein query
-    //                 </li>
-    //                 <li>
-    //                   tblastx - Search translated nucleotide database using
-    //                   translated nucleotide query
-    //                 </li>
-    //               </ul>
-    //             </li>
-    //           </ul>
-    //         </li>
-    //         <li>
-    //           <strong>Enter Your Query:</strong>
-    //           <ul>
-    //             <li>Paste your sequence in FASTA format in the input box</li>
-    //             <li>
-    //               Alternatively, upload a FASTA file using the file upload
-    //               option
-    //             </li>
-    //             <li>Example sequences are available for demonstration</li>
-    //           </ul>
-    //         </li>
-    //         <li>
-    //           <strong>Set Parameters:</strong>
-    //           <ul>
-    //             <li>
-    //               Adjust search sensitivity:
-    //               <ul>
-    //                 <li>E-value threshold</li>
-    //                 <li>Word size</li>
-    //                 <li>Max target sequences</li>
-    //               </ul>
-    //             </li>
-    //             <li>
-    //               Select database to search against (genomic, CDS, protein)
-    //             </li>
-    //           </ul>
-    //         </li>
-    //         <li>
-    //           <strong>Submit and View Results:</strong>
-    //           <ul>
-    //             <li>
-    //               Results display includes:
-    //               <ul>
-    //                 <li>Graphical overview of alignments</li>
-    //                 <li>Tabular hit list with scores and E-values</li>
-    //                 <li>
-    //                   Detailed alignments showing exact matches and mismatches
-    //                 </li>
-    //               </ul>
-    //             </li>
-    //             <li>Download results in various formats (XML, tabular)</li>
-    //             <li>
-    //               Click on hit identifiers to view corresponding gene
-    //               information
-    //             </li>
-    //           </ul>
-    //         </li>
-    //       </ol>
-    //       <img
-    //         src="/images/blast_01.png"
-    //         alt="BLAST Interface"
-    //         className={styles.image}
-    //       />
-    //     </div>
-    //   ),
-    // },
+          <h3>How to Use:</h3>
+          <ol className={styles.manual}>
+            <li>
+              <strong>Select BLAST Program:</strong>
+              <ul>
+                <li>
+                  Choose from available BLAST programs:
+                  <ul>
+                    <li>
+                      blastn - Search nucleotide database using nucleotide query
+                    </li>
+                    <li>
+                      blastp - Search protein database using protein query
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <strong>Enter Your Query:</strong>
+              <ul>
+                <li>Paste your sequence in FASTA format in the input box</li>
+                <li>
+                  Alternatively, upload a FASTA file using the file upload
+                  option
+                </li>
+              </ul>
+            </li>
+            <li>
+              <strong>Set Parameters:</strong>
+              <ul>
+                <li>
+                  Adjust search sensitivity:
+                  <ul>
+                    <li>E-value threshold</li>
+                    <li>Word size</li>
+                    <li>Max target sequences</li>
+                  </ul>
+                </li>
+                <li>
+                  Select database to search against (genomic, CDS, protein)
+                </li>
+              </ul>
+            </li>
+            <li>
+              <strong>Submit and View Results:</strong>
+              <ul>
+                <li>
+                  Results display includes:
+                  <ul>
+                    <li>Graphical overview of alignments</li>
+                    <li>Tabular hit list with scores and E-values</li>
+                    <li>
+                      Detailed alignments showing exact matches and mismatches
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ol>
+          <img
+            src="https://res.cloudinary.com/dsjtalfn9/image/upload/blast_uvcxav.png"
+            alt="BLAST Interface"
+            className={styles.image}
+          />
+        </div>
+      ),
+    },
     {
       name: "Contact",
       content: (
@@ -908,7 +890,7 @@ const Manual = () => {
           <h2>Contact Form</h2>
           <p>
             The Contact Page provides an intuitive interface for communicating
-            with the Black Pepper Knowledge base team.
+            with the Black Pepper Knowledge Base team.
           </p>
 
           <h3>How to Use:</h3>
@@ -949,7 +931,7 @@ const Manual = () => {
             </li>
           </ol>
           <img
-            src="https://res.cloudinary.com/dsjtalfn9/image/upload/cn1_ha2bcc.png"
+            src="https://res.cloudinary.com/dsjtalfn9/image/upload/contact_khltqc.png"
             alt="Contact Interface"
             className={styles.image}
           />

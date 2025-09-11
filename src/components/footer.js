@@ -62,7 +62,7 @@ const Footer = () => {
             <img src="/images/logo.png" alt="PepperKB Logo" />
           </div> */}
           <div className={styles.footerInfo}>
-            <p>Black Pepper Knowledgebase (BlackPepKB)</p>
+            <p>Black Pepper Knowledge Base (BlackPepKB)</p>
             <p>© {currentYear} All rights reserved.</p>
           </div>
         </div>

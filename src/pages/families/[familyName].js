@@ -310,13 +310,13 @@ const FamilyPage = () => {
     <>
       <Head>
         <title>
-          {familyName || "Gene"} TF Family - Black Pepper Knowledge base
+          {familyName || "Gene"} TF Family - Black Pepper Knowledge Base
         </title>
         <meta
           name="description"
           content={`${
             familyName || "Gene"
-          } family information in the Black Pepper Knowledge base`}
+          } family information in the Black Pepper Knowledge Base`}
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

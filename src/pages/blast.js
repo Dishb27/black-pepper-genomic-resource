@@ -449,7 +449,7 @@ const Blast = () => {
   return (
     <>
       <Head>
-        <title>BLAST Tool - Black Pepper Knowledge base</title>
+        <title>BLAST Tool - Black Pepper Knowledge Base</title>
         <meta
           name="description"
           content="Search the Black Pepper genome with BLAST"

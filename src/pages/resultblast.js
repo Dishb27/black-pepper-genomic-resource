@@ -297,7 +297,7 @@ const ResultBlast = () => {
     return (
       <>
         <Head>
-          <title>Loading Results - Black Pepper Knowledge base</title>
+          <title>Loading Results - Black Pepper Knowledge Base</title>
         </Head>
         <div className={styles.container}>
           <div className={styles.loader}>
@@ -312,7 +312,7 @@ const ResultBlast = () => {
   return (
     <>
       <Head>
-        <title>BLAST Results - Black Pepper Knowledge base</title>
+        <title>BLAST Results - Black Pepper Knowledge Base</title>
         <meta name="description" content="BLAST sequence analysis results" />
       </Head>
 
