@@ -24,10 +24,47 @@ const SNPMarkers = () => {
   const [allData, setAllData] = useState([]);
   const [showHeatmap, setShowHeatmap] = useState(true);
   const [loading, setLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [loadingMessage, setLoadingMessage] = useState("Initializing...");
   const [error, setError] = useState(null);
   const [, setCurrentPage] = useState(1);
   const [, setTotalPages] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+
+  // Enhanced loading messages
+  const loadingMessages = [
+    { message: "Connecting to database...", progress: 15 },
+    { message: "Fetching study information...", progress: 30 },
+    { message: "Loading SNP data...", progress: 50 },
+    { message: "Processing markers...", progress: 70 },
+    { message: "Organizing chromosomes...", progress: 85 },
+    { message: "Almost ready...", progress: 95 },
+  ];
+
+  // Simulate progressive loading updates
+  useEffect(() => {
+    if (loading) {
+      const interval = setInterval(() => {
+        setLoadingProgress((prev) => {
+          const newProgress = Math.min(prev + 1.5, 95);
+
+          // Update message based on progress
+          const currentMessage = loadingMessages.find(
+            (msg) =>
+              newProgress >= msg.progress - 15 &&
+              newProgress < msg.progress + 10
+          );
+          if (currentMessage) {
+            setLoadingMessage(currentMessage.message);
+          }
+
+          return newProgress;
+        });
+      }, 120);
+
+      return () => clearInterval(interval);
+    }
+  }, [loading]);
 
   // Check if device is mobile
   useEffect(() => {
@@ -49,12 +86,18 @@ const SNPMarkers = () => {
     try {
       console.log("Fetching data for study:", study); // Debug log
 
+      setLoadingMessage("Connecting to server...");
+      setLoadingProgress(10);
+
       // Fetch study details
       const studyResponse = await fetch(`/api/studies?studyName=${study}`);
       if (!studyResponse.ok) {
         throw new Error(`HTTP error! Status: ${studyResponse.status}`);
       }
       const studyData = await studyResponse.json();
+
+      setLoadingMessage("Processing study data...");
+      setLoadingProgress(25);
 
       if (studyData.length > 0) {
         const currentStudyId = studyData[0].study_id;
@@ -66,6 +109,9 @@ const SNPMarkers = () => {
         setStudyId(currentStudyId);
         setStudyName(currentStudyName);
 
+        setLoadingMessage("Fetching SNP markers...");
+        setLoadingProgress(40);
+
         // Fetch SNP data with pagination
         const snpResponse = await fetch(
           `/api/snp?studyId=${currentStudyId}&page=${page}&pageSize=20000`
@@ -74,6 +120,9 @@ const SNPMarkers = () => {
           throw new Error(`HTTP error! Status: ${snpResponse.status}`);
         }
         const snpData = await snpResponse.json();
+
+        setLoadingMessage("Processing SNP data...");
+        setLoadingProgress(60);
 
         // Transform data
         const formattedData = snpData.data.map((entry) => ({
@@ -85,6 +134,9 @@ const SNPMarkers = () => {
           qual: 0,
         }));
 
+        setLoadingMessage("Organizing results...");
+        setLoadingProgress(80);
+
         setAllData((prevData) =>
           page === 1 ? formattedData : [...prevData, ...formattedData]
         );
@@ -95,7 +147,13 @@ const SNPMarkers = () => {
         if (page < snpData.pagination.totalPages) {
           await fetchStudyData(page + 1);
         } else {
-          setLoading(false);
+          setLoadingMessage("Finalizing...");
+          setLoadingProgress(100);
+
+          // Small delay to show completion
+          setTimeout(() => {
+            setLoading(false);
+          }, 300);
         }
       } else {
         throw new Error("Study not found");
@@ -221,21 +279,65 @@ const SNPMarkers = () => {
     window.URL.revokeObjectURL(url);
   };
 
-  // Loading state
+  // Enhanced Loading Component
+  const LoadingComponent = () => (
+    <div className={styles.loadingContainer}>
+      <div className={styles.loadingCard}>
+        <div className={styles.loadingIcon}>
+          <i className="fas fa-dna fa-2x"></i>
+        </div>
+
+        <h3 className={styles.loadingTitle}>Loading SNP Data</h3>
+        <p className={styles.loadingSubtitle}>
+          Fetching SNP markers from the genomic database...
+        </p>
+
+        <div className={styles.progressContainer}>
+          <div className={styles.progressBar}>
+            <div
+              className={styles.progressFill}
+              style={{ width: `${loadingProgress}%` }}
+            ></div>
+          </div>
+          <div className={styles.progressText}>
+            {Math.round(loadingProgress)}%
+          </div>
+        </div>
+
+        <p className={styles.loadingMessage}>
+          <i className="fas fa-circle-notch fa-spin"></i>
+          {loadingMessage}
+        </p>
+
+        <div className={styles.loadingDisclaimer}>
+          <i className="fas fa-info-circle"></i>
+          <span>
+            This may take a few moments while we fetch comprehensive SNP marker
+            data
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Loading state with enhanced progress bar
   if (loading) {
     return (
       <>
+        <Head>
+          <title>SNP Markers - BlackPepKB</title>
+          <meta
+            name="description"
+            content={`Loading SNP markers for ${study} study`}
+          />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          />
+        </Head>
         <Header />
-        <div className={styles.loadingContainer}>
-          <div className={styles.spinner}></div>
-          <p>Loading study data...</p>
-          <p style={{ fontSize: "14px", color: "#666", marginTop: "10px" }}>
-            Please wait while we fetch SNP data...
-          </p>
-          {/* <p style={{ fontSize: "12px", color: "#999", marginTop: "5px" }}>
-            Study: {study}
-          </p> */}
-        </div>
+        <LoadingComponent />
         <Footer />
       </>
     );
@@ -286,7 +388,6 @@ const SNPMarkers = () => {
           Search for SNP markers by specifying chromosome and position range
         </p>
         <p style={{ fontSize: "14px", color: "#666", textAlign: "center" }}>
-          {/* <strong>Current Study:</strong> {studyName} (ID: {studyId}) |{" "} */}
           <strong>Total SNPs loaded:</strong> {allData.length.toLocaleString()}
         </p>
 
