@@ -115,7 +115,7 @@ function EFPBrowserPage() {
   };
 
   const openInNewTab = () => {
-    window.open("https://dish2711.shinyapps.io/pepper-eFP/", "_blank");
+    window.open("https://blackpepkb25.shinyapps.io/pepper-eFP/", "_blank");
   };
 
   const handleDismissBox = () => {
@@ -269,7 +269,7 @@ function EFPBrowserPage() {
 
               <iframe
                 ref={iframeRef}
-                src="https://dish2711.shinyapps.io/pepper-eFP/"
+                src="https://blackpepkb25.shinyapps.io/pepper-eFP/"
                 className={styles.responsiveIframe}
                 frameBorder="0"
                 title="Pepper eFP Browser"
