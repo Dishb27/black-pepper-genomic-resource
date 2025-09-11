@@ -12,7 +12,7 @@ const SNPMarkers = () => {
   const { study } = router.query;
 
   // State variables
-  const [, setStudyId] = useState("");
+  const [studyId, setStudyId] = useState("");
   const [studyName, setStudyName] = useState("");
   const [chromosome, setChromosome] = useState("");
   const [chromosomeStart, setChromosomeStart] = useState("");
@@ -47,6 +47,8 @@ const SNPMarkers = () => {
 
     setLoading(true);
     try {
+      console.log("Fetching data for study:", study); // Debug log
+
       // Fetch study details
       const studyResponse = await fetch(`/api/studies?studyName=${study}`);
       if (!studyResponse.ok) {
@@ -56,8 +58,13 @@ const SNPMarkers = () => {
 
       if (studyData.length > 0) {
         const currentStudyId = studyData[0].study_id;
+        const currentStudyName = studyData[0].study_name;
+
+        console.log("Study ID:", currentStudyId); // Debug log
+        console.log("Study Name:", currentStudyName); // Debug log
+
         setStudyId(currentStudyId);
-        setStudyName(studyData[0].study_name);
+        setStudyName(currentStudyName);
 
         // Fetch SNP data with pagination
         const snpResponse = await fetch(
@@ -214,31 +221,6 @@ const SNPMarkers = () => {
     window.URL.revokeObjectURL(url);
   };
 
-  // Render pagination controls (if needed for future use)
-  // const renderPaginationControls = () => {
-  //   return (
-  //     <div className={styles.paginationControls}>
-  //       <button
-  //         onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
-  //         disabled={currentPage === 1}
-  //       >
-  //         Previous
-  //       </button>
-  //       <span>
-  //         Page {currentPage} of {totalPages}
-  //       </span>
-  //       <button
-  //         onClick={() =>
-  //           setCurrentPage((page) => Math.min(totalPages, page + 1))
-  //         }
-  //         disabled={currentPage === totalPages}
-  //       >
-  //         Next
-  //       </button>
-  //     </div>
-  //   );
-  // };
-
   // Loading state
   if (loading) {
     return (
@@ -250,6 +232,9 @@ const SNPMarkers = () => {
           <p style={{ fontSize: "14px", color: "#666", marginTop: "10px" }}>
             Please wait while we fetch SNP data...
           </p>
+          {/* <p style={{ fontSize: "12px", color: "#999", marginTop: "5px" }}>
+            Study: {study}
+          </p> */}
         </div>
         <Footer />
       </>
@@ -264,6 +249,9 @@ const SNPMarkers = () => {
         <div className={styles.errorContainer}>
           <h2>Error Loading Data</h2>
           <p>Error loading study data: {error}</p>
+          <p style={{ fontSize: "14px", color: "#666", marginTop: "10px" }}>
+            Study: {study}
+          </p>
           <button onClick={() => router.push("/snp_markers")}>
             Return to Study Selection
           </button>
@@ -282,7 +270,7 @@ const SNPMarkers = () => {
   return (
     <>
       <Head>
-        <title>{studyName} SNP Markers - BlackPepKB</title>
+        <title>SNP Markers - BlackPepKB</title>
         <meta
           name="description"
           content={`Search SNP markers for ${studyName} study`}
@@ -298,7 +286,8 @@ const SNPMarkers = () => {
           Search for SNP markers by specifying chromosome and position range
         </p>
         <p style={{ fontSize: "14px", color: "#666", textAlign: "center" }}>
-          Total SNPs loaded: {allData.length.toLocaleString()}
+          {/* <strong>Current Study:</strong> {studyName} (ID: {studyId}) |{" "} */}
+          <strong>Total SNPs loaded:</strong> {allData.length.toLocaleString()}
         </p>
 
         <form onSubmit={handleSearch} className={styles.searchBar}>
@@ -376,20 +365,10 @@ const SNPMarkers = () => {
           </div>
         </form>
 
-        {/* Heatmap section */}
-        {showHeatmap && allData.length > 0 && (
+        {/* Heatmap section - Pass studyId and force re-render with key */}
+        {showHeatmap && studyId && (
           <div className={styles.visualizationSection}>
-            {/* <h3>SNP Distribution Heatmap</h3> */}
-            <SNPHeatmap
-              chromosomes={
-                filteredResults.length > 0
-                  ? filteredResults.map((entry) => entry.chromosome)
-                  : []
-              }
-              heatmapData={
-                filteredResults.length > 0 ? filteredResults : allData
-              }
-            />
+            <SNPHeatmap key={`heatmap-${studyId}`} studyId={studyId} />
           </div>
         )}
 
@@ -405,7 +384,6 @@ const SNPMarkers = () => {
             <>
               {/* SNP Visualization */}
               <div className={styles.visualizationSection}>
-                {/* <h3>SNP Visualization</h3> */}
                 <SNPVisualization
                   snps={filteredResults}
                   start={parseInt(chromosomeStart)}

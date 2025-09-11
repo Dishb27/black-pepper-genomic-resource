@@ -22,11 +22,26 @@ const Heatmap = ({ chromosomes, heatmapData }) => {
       ]}
       layout={{
         title: "SNP Distribution Heatmap",
-        xaxis: { title: "1Mb Bins" },
-        yaxis: { title: "Chromosomes" },
+        xaxis: {
+          title: {
+            text: "1Mb Bins",
+            standoff: 20, // This moves the x-axis title further from the tick labels
+          },
+        },
+        yaxis: {
+          title: {
+            text: "Chromosomes",
+            standoff: 15, // Optional: adjust y-axis title spacing too
+          },
+        },
         height: 600,
         width: 1000,
-        margin: { t: 50, l: 100, r: 50, b: 50 },
+        margin: {
+          t: 50,
+          l: 100,
+          r: 50,
+          b: 80, // Increased bottom margin to accommodate the moved title
+        },
       }}
     />
   );
